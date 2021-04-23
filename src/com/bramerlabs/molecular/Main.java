@@ -9,6 +9,7 @@ import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.math.vector.Vector4f;
 import com.bramerlabs.engine.objects.shapes.shapes_3d.Sphere;
 import com.bramerlabs.molecular.molecule.Atom;
+import com.bramerlabs.molecular.molecule.Bond;
 import com.bramerlabs.molecular.molecule.Molecule;
 import org.lwjgl.opengl.GL46;
 
@@ -76,6 +77,9 @@ public class Main implements Runnable {
             for (Atom atom : molecule.getAtoms()) {
                 renderer.renderMesh(atom.getRenderSphere(), camera, shader, Renderer.COLOR);
             }
+            for (Bond bond: molecule.getBonds()) {
+                renderer.renderMesh(bond.getRenderCylinder(), camera, shader, Renderer.COLOR);
+            }
         }
 
         // swap frame buffer at the end
@@ -85,7 +89,9 @@ public class Main implements Runnable {
     private void initMolecule() {
         this.molecules = new ArrayList<>();
         Molecule molecule = new Molecule();
-        molecule.addAtom(new Atom(1, new Vector3f(0, 0, 0)));
+        molecule.addAtom(new Atom(1, new Vector3f(0, 0, -1)));
+        molecule.addAtom(new Atom(1, new Vector3f(0, 0, 1)));
+        molecule.addBond(new Bond(molecule.getAtoms().get(0), molecule.getAtoms().get(1)));
         this.molecules.add(molecule);
     }
 

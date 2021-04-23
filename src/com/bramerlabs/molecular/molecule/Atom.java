@@ -18,7 +18,7 @@ public class Atom {
     public Atom(int atomicNumber, Vector3f position) {
         this.atomicNumber = atomicNumber;
         this.position = position;
-        this.renderSphere = Sphere.getInstance(position, new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 1.0f);
+        this.renderSphere = Sphere.getInstance(position, new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 0.5f);
         this.renderSphere.createMesh();
     }
 
