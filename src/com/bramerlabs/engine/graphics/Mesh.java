@@ -7,6 +7,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 public class Mesh {
 
@@ -38,6 +39,22 @@ public class Mesh {
         this.vertices = vertices;
         this.indices = indices;
         this.material = material;
+    }
+
+    /**
+     * constructor for specified list of vertices
+     * @param vertices - the list of vertices
+     */
+    public Mesh(ArrayList<Vertex> vertices) {
+        this.vertices = new Vertex[vertices.size()];
+        for (int i = 0; i < vertices.size(); i++) {
+            this.vertices[i] = vertices.get(i);
+        }
+
+        this.indices = new int[vertices.size()];
+        for (int i = 0; i < vertices.size(); i++) {
+            this.indices[i] = i;
+        }
     }
 
     /**
