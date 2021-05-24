@@ -41,4 +41,20 @@ public class Molecule {
         this.bonds.remove(bond);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (Atom atom : atoms) {
+            result.append("atom").append(": ");
+            result.append(atom.getAtomicNumber()).append(", ");
+            result.append(atom.getPosition()).append(", ");
+        }
+        for (Bond bond : bonds) {
+            result.append("bond").append(": ");
+            result.append(bond.getP1()).append(", ");
+            result.append(bond.getP2()).append(", ");
+        }
+        return result.toString();
+    }
+
 }
