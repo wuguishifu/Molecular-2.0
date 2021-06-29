@@ -149,7 +149,7 @@ public class Camera {
 
         // change the camera distance using the scroll wheel
         if (distance > 0) {
-            distance -= dsy * 1f;
+            distance -= dsy;
         } else {
             distance = 0.1f;
         }
@@ -313,5 +313,21 @@ public class Camera {
      */
     public float getVerticalDistance() {
         return this.verticalDistance;
+    }
+
+    public void setHorizontalDistance(float horizontalDistance) {
+        this.horizontalDistance = horizontalDistance;
+    }
+
+    public void setVerticalDistance(float verticalDistance) {
+        this.verticalDistance = verticalDistance;
+    }
+
+    public void setVerticalAngle(float verticalAngle) {
+        this.verticalAngle = verticalAngle;
+    }
+
+    public void setHorizontalAngle(float horizontalAngle) {
+        this.horizontalAngle = horizontalAngle;
     }
 }

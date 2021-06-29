@@ -23,13 +23,13 @@ public class Renderer {
             STRUCTURE = 0x4; // structured rendering
 
     // the window to render to
-    private final Window window;
+    protected final Window window;
 
     // the position of the light source;
-    private final Vector3f lightPosition;
+    protected final Vector3f lightPosition;
 
     // the light color
-    private final Vector3f lightColor = new Vector3f(1.0f, 1.0f, 1.0f);
+    protected final Vector3f lightColor = new Vector3f(1.0f, 1.0f, 1.0f);
 
     /**
      * default constructor

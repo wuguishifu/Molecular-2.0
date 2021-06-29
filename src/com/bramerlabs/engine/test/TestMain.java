@@ -33,7 +33,7 @@ public class TestMain implements Runnable {
     private Renderer renderer;
 
     // the position of the light source
-    private Vector3f lightPosition = new Vector3f(0, 2.0f, 3.0f);
+    private final Vector3f lightPosition = new Vector3f(0, 2.0f, 3.0f);
 
     // test objects to render
     private Sphere sphere, sphere1, sphere2;
