@@ -1,6 +1,5 @@
 package com.bramerlabs.molecular.molecule.bond;
 
-import com.bramerlabs.engine.math.matrix.Matrix4f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.math.vector.Vector4f;
 import com.bramerlabs.engine.objects.RenderObject;

@@ -2,7 +2,6 @@ package com.bramerlabs.molecular.molecule.default_molecules;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.molecular.molecule.Molecule;
-import com.bramerlabs.molecular.molecule.atom.Atom;
 import com.bramerlabs.molecular.molecule.atom.AtomicData;
 import com.bramerlabs.molecular.molecule.atom.common.Carbon;
 import com.bramerlabs.molecular.molecule.atom.common.Hydrogen;

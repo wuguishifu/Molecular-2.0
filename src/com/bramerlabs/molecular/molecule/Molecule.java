@@ -1,10 +1,8 @@
 package com.bramerlabs.molecular.molecule;
 
-import com.bramerlabs.engine.math.matrix.Matrix4f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.objects.RenderObject;
 import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.atom.AtomicData;
 import com.bramerlabs.molecular.molecule.bond.Bond;
 
 import java.util.ArrayList;

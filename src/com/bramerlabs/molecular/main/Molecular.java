@@ -10,7 +10,6 @@ import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.atom.Atom;
 import com.bramerlabs.molecular.molecule.bond.Bond;
 import com.bramerlabs.molecular.molecule.default_molecules.*;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL46;
 
 import java.util.ArrayList;
