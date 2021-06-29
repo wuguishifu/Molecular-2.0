@@ -13,7 +13,7 @@ public class Atom {
     private Vector3f position;
     private final int atomicNumber;
 
-    private ArrayList<Bond> connectedBonds;
+    private final ArrayList<Bond> connectedBonds = new ArrayList<>();
 
     public Atom(int atomicNumber, Vector3f position) {
         this.atomicNumber = atomicNumber;
@@ -43,7 +43,9 @@ public class Atom {
 
     public void moveTo(Vector3f position) {
         this.position = position;
-        // bond movement to be implemented later
+        for (Bond bond : connectedBonds) {
+            bond.recalculateModelComponents();
+        }
     }
 
     public static RenderObject generateRenderObject(int atomicNumber) {

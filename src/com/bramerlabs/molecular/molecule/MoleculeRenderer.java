@@ -8,6 +8,7 @@ import com.bramerlabs.engine.math.matrix.Matrix4f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.objects.RenderObject;
 import com.bramerlabs.molecular.molecule.atom.Atom;
+import com.bramerlabs.molecular.molecule.bond.Bond;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
@@ -24,12 +25,17 @@ public class MoleculeRenderer extends Renderer {
     }
 
     public void renderMolecule(Molecule molecule, Camera camera, Shader shader) {
+        for (Bond bond : molecule.getBonds()) {
+            for (RenderObject object : molecule.getBondObject(bond.getOrder())) {
+                renderInstancedBond(object, camera, shader, bond);
+            }
+        }
         for (Atom atom : molecule.getAtoms()) {
-            renderInstancedObject(molecule.getAtomObject(atom.getAtomicNumber()), camera, shader, atom.getPosition());
+            renderInstancedAtom(molecule.getAtomObject(atom.getAtomicNumber()), camera, shader, atom.getPosition());
         }
     }
 
-    private void renderInstancedObject(RenderObject object, Camera camera, Shader shader, Vector3f position) {
+    public void renderInstancedAtom(RenderObject object, Camera camera, Shader shader, Vector3f position) {
         // bind the vertex array object
         GL30.glBindVertexArray(object.getMesh().getVAO());
 
@@ -63,6 +69,43 @@ public class MoleculeRenderer extends Renderer {
         shader.unbind();
 
         // unbind the index buffer
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        // disable the vertex attributes
+        GL30.glDisableVertexAttribArray(0); // position buffer
+        GL30.glDisableVertexAttribArray(2); // normal buffer
+        GL30.glDisableVertexAttribArray(5); // color buffer
+
+        // unbind the vertex array object
+        GL30.glBindVertexArray(0);
+    }
+
+    public void renderInstancedBond(RenderObject object, Camera camera, Shader shader, Bond bond) {
+        GL30.glBindVertexArray(object.getMesh().getVAO());
+
+        GL30.glEnableVertexAttribArray(0);
+        GL30.glEnableVertexAttribArray(2);
+        GL30.glEnableVertexAttribArray(5);
+
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, object.getMesh().getIBO());
+
+        shader.bind();
+
+        shader.setUniform("vModel", Matrix4f.transform(bond.getPosition(), bond.getRotationAxes(),
+                bond.getRotationAngles(), bond.getScale()));
+        shader.setUniform("vView", Matrix4f.view(camera.getPosition(), camera.getRotation()));
+        shader.setUniform("vProjection", window.getProjectionMatrix());
+
+        shader.setUniform("lightPos", lightPosition);
+        shader.setUniform("lightLevel", 0.3f);
+        shader.setUniform("lightColor", lightColor);
+        shader.setUniform("reflectiveness", 32);
+        shader.setUniform("viewPos", camera.getPosition());
+
+        GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
+
+        shader.unbind();
+
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 
         // disable the vertex attributes

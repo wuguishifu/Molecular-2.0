@@ -36,8 +36,9 @@ public class RenderObject {
     /**
      * creates the mesh
      */
-    public void createMesh() {
+    public RenderObject createMesh() {
         mesh.create();
+        return this;
     }
 
     /**

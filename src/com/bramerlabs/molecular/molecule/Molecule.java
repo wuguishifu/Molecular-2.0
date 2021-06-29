@@ -1,8 +1,10 @@
 package com.bramerlabs.molecular.molecule;
 
+import com.bramerlabs.engine.math.matrix.Matrix4f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.objects.RenderObject;
 import com.bramerlabs.molecular.molecule.atom.Atom;
+import com.bramerlabs.molecular.molecule.atom.AtomicData;
 import com.bramerlabs.molecular.molecule.bond.Bond;
 
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.HashMap;
 
 public class Molecule {
 
-    private Vector3f position;
+    private final Vector3f position;
 
     private final ArrayList<Atom> atoms;
     private final ArrayList<Bond> bonds;
@@ -37,6 +39,18 @@ public class Molecule {
         bonds.add(bond);
     }
 
+    public void removeAtom(Atom atom) {
+        this.atoms.remove(atom);
+    }
+
+    public void removeBond(Bond bond) {
+        this.bonds.remove(bond);
+    }
+
+    public void moveAtom(Atom atom, Vector3f position) {
+        atom.moveTo(position);
+    }
+
     public HashMap<Integer, RenderObject> atomObjects = new HashMap<>();
     public HashMap<Integer, RenderObject> bondObjects = new HashMap<>();
 
@@ -50,11 +64,14 @@ public class Molecule {
         }
     }
 
-    public RenderObject getBondObject(int ID) {
-        if (atomObjects.containsKey(ID)) {
-            return bondObjects.get(ID);
-        } else {
-            return bondObjects.put(ID, Bond.generateRenderObject(ID));
+    public RenderObject[] getBondObject(int order) {
+        switch (order) {
+            default:
+                return Bond.SINGLE_BOND;
+            case Bond.DOUBLE:
+                return Bond.DOUBLE_BOND;
+            case Bond.TRIPLE:
+                return Bond.TRIPLE_BOND;
         }
     }
 

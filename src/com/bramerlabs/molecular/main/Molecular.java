@@ -8,7 +8,8 @@ import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.default_molecules.Benzene;
+import com.bramerlabs.molecular.molecule.bond.Bond;
+import com.bramerlabs.molecular.molecule.default_molecules.*;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL46;
 
@@ -48,6 +49,17 @@ public class Molecular implements Runnable {
         molecule = new Benzene(new Vector3f(0, 0, 0));
     }
 
+    public void initTestMolecule() {
+        molecule = new Molecule(new Vector3f(0, 0, 0), new ArrayList<>(), new ArrayList<>());
+        molecule.addAtom(new Atom(1, new Vector3f(-2, 0, 0)));
+        molecule.addAtom(new Atom(1, new Vector3f(2, 0, 0)));
+        molecule.addBond(new Bond(molecule.getAtoms().get(0), molecule.getAtoms().get(1), 2));
+        molecule.getAtoms().get(0).addBond(molecule.getBonds().get(0));
+        molecule.getAtoms().get(1).addBond(molecule.getBonds().get(0));
+        System.out.println(Vector3f.distance(molecule.getAtoms().get(0).getPosition(), molecule.getAtoms().get(1).getPosition()));
+        System.out.println(Vector3f.distance(new Vector3f(-2, 0, 0), new Vector3f(2, 0, 0)));
+    }
+
     public void init() {
         window.create();
         shader = new Shader("shaders/default/vertex.glsl",
@@ -57,7 +69,10 @@ public class Molecular implements Runnable {
         camera.setFocus(new Vector3f(0, 0, 0));
         camera.setVerticalAngle(-30);
         camera.setDistance(10);
+
+        // initialize molecules
         initMolecule();
+//        initTestMolecule();
     }
 
     public void update() {

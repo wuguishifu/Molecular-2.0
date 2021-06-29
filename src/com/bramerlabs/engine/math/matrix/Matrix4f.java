@@ -133,6 +133,18 @@ public class Matrix4f {
         return Matrix4f.multiply(Matrix4f.multiply(scaleMatrix, rotationMatrix), translationMatrix);
     }
 
+    public static Matrix4f transform(Vector3f position, Vector3f[] rotationAxes, float[] angles, Vector3f scale) {
+        Matrix4f translationMatrix = Matrix4f.translate(position);
+        Matrix4f rotationMatrix = Matrix4f.identity();
+        for (int i = 0; i < rotationAxes.length; i++) {
+            if (rotationAxes[i] != null) {
+                rotationMatrix = Matrix4f.multiply(rotationMatrix, Matrix4f.rotate(angles[i], rotationAxes[i]));
+            }
+        }
+        Matrix4f scaleMatrix = Matrix4f.scale(scale);
+        return Matrix4f.multiply(Matrix4f.multiply(scaleMatrix, rotationMatrix), translationMatrix);
+    }
+
     /**
      * creates a projection matrix based off of a certain perspective
      * @param fov - the field of view of the perspective

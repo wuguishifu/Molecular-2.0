@@ -457,7 +457,7 @@ public class Vector3f {
      * @return - the length between vector 1 and vector 2
      */
     public static float distance(Vector3f v, Vector3f u) {
-        return length(multiply(subtract(u, v), subtract(u, v)));
+        return length(subtract(u, v));
     }
 
     /**
