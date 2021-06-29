@@ -57,6 +57,33 @@ public class Vector2f {
     }
 
     /**
+     * generates a random vector with all components between 0 and a max value
+     * @param max - the max value
+     * @return - the new vector
+     */
+    public static Vector2f random(float max) {
+        return new Vector2f((float) Math.random() * max, (float) Math.random() * max);
+    }
+
+    /**
+     * generates a random vector with all components between 0 and 1
+     * @return - the new vector
+     */
+    public static Vector2f random() {
+        return new Vector2f((float) Math.random(), (float) Math.random());
+    }
+
+    /**
+     * generates a random vector with all components between 0 and a max value
+     * @param maxX - the max x value
+     * @param maxY - the max y value
+     * @return - the new vector
+     */
+    public static Vector2f random(float maxX, float maxY) {
+        return new Vector2f((float) Math.random() * maxX, (float) Math.random() * maxY);
+    }
+
+    /**
      * sets the components of this vector
      * @param x - the new x component
      * @param y - the new y component
@@ -260,6 +287,16 @@ public class Vector2f {
     }
 
     /**
+     * divides the components of a vector by a value
+     * @param v - the vector
+     * @param m - the value
+     * @return - the new vector, (v.x / m, v.y / m)
+     */
+    public static Vector2f divide(Vector2f v, float m) {
+        return new Vector2f(v.x / m, v.y / m);
+    }
+
+    /**
      * divides the components of a vector by certain values
      * @param v - the vector
      * @param mx - the division factor of the x component
@@ -316,6 +353,10 @@ public class Vector2f {
         return (float) Math.sqrt(v.x * v.x + v.y * v.y);
     }
 
+    public static float angleBetween(Vector2f v, Vector2f u) {
+        return (float) Math.acos(Vector2f.dot(Vector2f.normalize(v), Vector2f.normalize(u)) / (Vector2f.length(v) * Vector2f.length(u)));
+    }
+
     /**
      * normalizes this vector
      * @return - this vector
@@ -357,6 +398,16 @@ public class Vector2f {
     }
 
     /**
+     * computes the distance between two vectors
+     * @param v - the first vector
+     * @param u - the second vector
+     * @return - the distance between v and u
+     */
+    public static float distance(Vector2f v, Vector2f u) {
+        return Vector2f.length(Vector2f.subtract(v, u));
+    }
+
+    /**
      * getter method
      * @return - the x component of this vector
      */
@@ -394,6 +445,26 @@ public class Vector2f {
      */
     public float[] toFloatArray() {
         return new float[]{x, y};
+    }
+
+    /**
+     * determines the center point of 2 vectors
+     * @param v - the first vector
+     * @param u - the second vector
+     * @return - a vector at the center point of the two vectors
+     */
+    public static Vector2f center(Vector2f v, Vector2f u) {
+        return new Vector2f((v.x + u.x) / 2, (v.y + u.y) / 2);
+    }
+
+    /**
+     * calculates the determinant of 2 vectors
+     * @param v - the first vector
+     * @param u - the second vector
+     * @return - the determinant of the two vectors
+     */
+    public static float det(Vector2f v, Vector2f u) {
+        return v.x * u.y - v.y * u.x;
     }
 
     /**

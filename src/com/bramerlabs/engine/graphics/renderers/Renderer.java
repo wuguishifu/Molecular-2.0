@@ -19,8 +19,8 @@ public class Renderer {
     public static final int
             LIGHT =     0x1, // light rendering
             TEXTURE =   0x2, // texture rendering
-            COLOR =     0x4, // normal rendering
-            STRUCTURE = 0x8; // structured rendering
+            COLOR =     0x3, // normal rendering
+            STRUCTURE = 0x4; // structured rendering
 
     // the window to render to
     private final Window window;

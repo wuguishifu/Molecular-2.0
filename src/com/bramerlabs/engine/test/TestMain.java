@@ -11,6 +11,7 @@ import com.bramerlabs.engine.math.matrix.Matrix4f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.math.vector.Vector4f;
 import com.bramerlabs.engine.objects.shapes.shapes_3d.Cube;
+import com.bramerlabs.engine.objects.shapes.shapes_3d.Cylinder;
 import com.bramerlabs.engine.objects.shapes.shapes_3d.Sphere;
 import org.lwjgl.opengl.GL46;
 
@@ -39,6 +40,7 @@ public class TestMain implements Runnable {
     private Cube lightCube;
     private MaterialStructure material;
     private LightStructure light;
+    private Cylinder cylinder;
 
     /**
      * the main runnable method
@@ -133,12 +135,20 @@ public class TestMain implements Runnable {
                 new Vector3f(0.5f),
                 new Vector4f(1.0f)
         );
+        cylinder = Cylinder.getInstance(
+                new Vector3f(0, 0, 0),
+                new Vector3f(1, 1, 1),
+                new Vector4f(0.5f, 0.5f, 0.5f, 1.0f),
+                0.5f,
+                true
+        );
 
         // initialize the object meshes
         sphere.createMesh();
         sphere1.createMesh();
         sphere2.createMesh();
         lightCube.createMesh();
+        cylinder.createMesh();
 
         light = new LightStructure(
                 lightPosition,
@@ -173,8 +183,8 @@ public class TestMain implements Runnable {
         sphere2.setPosition(Matrix4f.multiply(rotation2, new Vector4f(sphere2.getPosition(), 1.0f)).xyz());
 
         // update the camera
-//        camera.updateArcball();
-        camera.update();
+        camera.updateArcball();
+//        camera.update();
     }
 
     /**
@@ -187,6 +197,7 @@ public class TestMain implements Runnable {
         renderer.renderStructuredMesh(sphere1, camera, structureShader, material, light);
 //        renderer.renderStructuredMesh(sphere2, camera, structureShader, material, light);
         renderer.renderMesh(lightCube, camera, lightShader, Renderer.LIGHT);
+        renderer.renderMesh(cylinder, camera, colorShader, Renderer.COLOR);
 
         // swap the frame buffers
         window.swapBuffers();

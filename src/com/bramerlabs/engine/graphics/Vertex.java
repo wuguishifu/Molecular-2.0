@@ -4,7 +4,6 @@ import com.bramerlabs.engine.math.vector.Vector2f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.math.vector.Vector4f;
 
-@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class Vertex {
 
     // the position of this vertex

@@ -406,7 +406,7 @@ public class Vector4f {
                 v.y /= v.length(),
                 v.z /= v.length(),
                 v.w /= v.length()
-                );
+        );
     }
 
     /**
