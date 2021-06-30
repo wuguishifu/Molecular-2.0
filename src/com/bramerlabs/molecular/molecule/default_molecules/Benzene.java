@@ -36,14 +36,14 @@ public class Benzene extends Molecule {
 
         // carbon atoms
         for (float[] p : positions) {
-            this.addAtom(new Carbon(Vector3f.add(Vector3f.normalize(new Vector3f(p), CCBond), position)));
+            this.add(new Carbon(Vector3f.add(Vector3f.normalize(new Vector3f(p), CCBond), position)));
         }
-        this.addBond(new Bond(this.getAtoms().get(1), this.getAtoms().get(0), Bond.SINGLE)); // 0
-        this.addBond(new Bond(this.getAtoms().get(2), this.getAtoms().get(1), Bond.DOUBLE)); // 1
-        this.addBond(new Bond(this.getAtoms().get(3), this.getAtoms().get(2), Bond.SINGLE)); // 2
-        this.addBond(new Bond(this.getAtoms().get(4), this.getAtoms().get(3), Bond.DOUBLE)); // 3
-        this.addBond(new Bond(this.getAtoms().get(5), this.getAtoms().get(4), Bond.SINGLE)); // 4
-        this.addBond(new Bond(this.getAtoms().get(0), this.getAtoms().get(5), Bond.DOUBLE)); // 5
+        this.add(new Bond(this.getAtoms().get(1), this.getAtoms().get(0), Bond.SINGLE)); // 0
+        this.add(new Bond(this.getAtoms().get(2), this.getAtoms().get(1), Bond.DOUBLE)); // 1
+        this.add(new Bond(this.getAtoms().get(3), this.getAtoms().get(2), Bond.SINGLE)); // 2
+        this.add(new Bond(this.getAtoms().get(4), this.getAtoms().get(3), Bond.DOUBLE)); // 3
+        this.add(new Bond(this.getAtoms().get(5), this.getAtoms().get(4), Bond.SINGLE)); // 4
+        this.add(new Bond(this.getAtoms().get(0), this.getAtoms().get(5), Bond.DOUBLE)); // 5
         this.getAtoms().get(1).addBond(this.getBonds().get(0));
         this.getAtoms().get(0).addBond(this.getBonds().get(0));
         this.getAtoms().get(2).addBond(this.getBonds().get(1));
@@ -59,14 +59,14 @@ public class Benzene extends Molecule {
 
         // hydrogen atoms
         for (float[] p : positions) {
-            this.addAtom(new Hydrogen(Vector3f.add(Vector3f.normalize(new Vector3f(p), CCBond + CHBond), position)));
+            this.add(new Hydrogen(Vector3f.add(Vector3f.normalize(new Vector3f(p), CCBond + CHBond), position)));
         }
-        this.addBond(new Bond(this.getAtoms().get(0), this.getAtoms().get(6), Bond.SINGLE)); // 6
-        this.addBond(new Bond(this.getAtoms().get(1), this.getAtoms().get(7), Bond.SINGLE)); // 7
-        this.addBond(new Bond(this.getAtoms().get(2), this.getAtoms().get(8), Bond.SINGLE)); // 8
-        this.addBond(new Bond(this.getAtoms().get(3), this.getAtoms().get(9), Bond.SINGLE)); // 9
-        this.addBond(new Bond(this.getAtoms().get(4), this.getAtoms().get(10), Bond.SINGLE)); // 10
-        this.addBond(new Bond(this.getAtoms().get(5), this.getAtoms().get(11), Bond.SINGLE)); // 11
+        this.add(new Bond(this.getAtoms().get(0), this.getAtoms().get(6), Bond.SINGLE)); // 6
+        this.add(new Bond(this.getAtoms().get(1), this.getAtoms().get(7), Bond.SINGLE)); // 7
+        this.add(new Bond(this.getAtoms().get(2), this.getAtoms().get(8), Bond.SINGLE)); // 8
+        this.add(new Bond(this.getAtoms().get(3), this.getAtoms().get(9), Bond.SINGLE)); // 9
+        this.add(new Bond(this.getAtoms().get(4), this.getAtoms().get(10), Bond.SINGLE)); // 10
+        this.add(new Bond(this.getAtoms().get(5), this.getAtoms().get(11), Bond.SINGLE)); // 11
         this.getAtoms().get(0).addBond(this.getBonds().get(6));
         this.getAtoms().get(6).addBond(this.getBonds().get(6));
         this.getAtoms().get(1).addBond(this.getBonds().get(7));

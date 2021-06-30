@@ -155,6 +155,16 @@ public class AtomicData {
         }
     }
 
+    public static float getBondLength(int a1, int a2, int order) {
+        if (!hasBeenInitialized) {
+            init();
+        }
+        float r1 = getVDWRadius(a1);
+        float r2 = getVDWRadius(a2);
+        float bl = getCovalentBondLength(a1, a2, order);
+        return r1 + r2 + bl;
+    }
+
     public static void init() {
         initElementNames();
         compileCovalentRadii();

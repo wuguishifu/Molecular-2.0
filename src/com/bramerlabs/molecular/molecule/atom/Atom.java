@@ -49,11 +49,22 @@ public class Atom {
     }
 
     public static RenderObject generateRenderObject(int atomicNumber) {
-        float radius = AtomicData.getVDWRadius(atomicNumber);
-        Vector4f color = new Vector4f(AtomicData.getCPKColor(atomicNumber), 1.0f);
-        Sphere sphere = Sphere.getInstance(new Vector3f(0, 0, 0), color, radius);
-        sphere.createMesh();
-        return sphere;
+        if (atomicNumber == 0) {
+            return Sphere.getInstance(new Vector3f(0, 0, 0), new Vector4f(1, 1, 1, 0),
+                    AtomicData.getVDWRadius(AtomicData.CARBON));
+        } else {
+            float radius = AtomicData.getVDWRadius(atomicNumber);
+            Vector4f color = new Vector4f(AtomicData.getCPKColor(atomicNumber), 1.0f);
+            Sphere sphere = Sphere.getInstance(new Vector3f(0, 0, 0), color, radius);
+            sphere.createMesh();
+            return sphere;
+        }
+    }
+
+    @Override
+    public String toString() {
+        String atomName = AtomicData.getAtomAbbrName(this.atomicNumber);
+        return atomName + " at " + position;
     }
 
 }
