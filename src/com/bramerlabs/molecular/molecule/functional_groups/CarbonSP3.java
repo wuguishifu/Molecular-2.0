@@ -51,6 +51,55 @@ public class CarbonSP3 extends FunctionalGroup {
         atoms[2] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[1], Bond.DEFAULT_BOND_LENGTH));
         atoms[3] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[2], Bond.DEFAULT_BOND_LENGTH));
 
+        Vector3f v1 = atoms[1].getPosition();
+        Vector3f v2 = atoms[2].getPosition();
+        Vector3f v3 = atoms[3].getPosition();
+
+        // temp rotation
+        Vector3f rotationAxis = Vector3f.normalize(new Vector3f(1, 1, 1));
+        float rotationAngle = 10.0f;
+
+        v1 = Vector3f.rotate(v1, rotationAngle, rotationAxis);
+        v2 = Vector3f.rotate(v2, rotationAngle, rotationAxis);
+        v3 = Vector3f.rotate(v3, rotationAngle, rotationAxis);
+
+        // alignment rotation
+        Vector3f normal = Vector3f.subtract(bond.getvLeft(), bond.getvRight());
+        Vector3f binorm = HYDROGEN_POSITIONS[3];
+        rotationAxis = Vector3f.normalize(Vector3f.cross(binorm, normal));
+        rotationAngle = (float) Math.toDegrees(Math.acos(Vector3f.dot(binorm, normal)
+                * Vector3f.quickInverseSqrt(normal) * Vector3f.quickInverseSqrt(binorm)));
+
+        v1 = Vector3f.rotate(v1, rotationAngle, rotationAxis);
+        v2 = Vector3f.rotate(v2, rotationAngle, rotationAxis);
+        v3 = Vector3f.rotate(v3, rotationAngle, rotationAxis);
+
+        // translation
+        Vector3f v0 = bond.getEmptyPosition();
+        v1 = Vector3f.add(v1, v0);
+        v2 = Vector3f.add(v2, v0);
+        v3 = Vector3f.add(v3, v0);
+
+        atoms[0].moveTo(v0);
+        atoms[1].moveTo(v1);
+        atoms[2].moveTo(v2);
+        atoms[3].moveTo(v3);
+
+        bonds = new Bond[3];
+        bonds[0] = new Bond(atoms[0], atoms[1]);
+        bonds[1] = new Bond(atoms[0], atoms[2]);
+        bonds[2] = new Bond(atoms[0], atoms[3]);
+
+        bond.setEmptyAtom(atoms[0]);
+    }
+
+    public void populate_(Bond bond) {
+        atoms = new Atom[4];
+        atoms[0] = new Carbon(new Vector3f(0, 0, 0));
+        atoms[1] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[0], Bond.DEFAULT_BOND_LENGTH));
+        atoms[2] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[1], Bond.DEFAULT_BOND_LENGTH));
+        atoms[3] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[2], Bond.DEFAULT_BOND_LENGTH));
+
         int position = 2;
 
         // alignment rotation
