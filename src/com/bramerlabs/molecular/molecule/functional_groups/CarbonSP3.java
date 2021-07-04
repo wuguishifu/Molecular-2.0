@@ -44,56 +44,7 @@ public class CarbonSP3 extends FunctionalGroup {
         bonds[3] = new Bond(atoms[0], atoms[4]);
     }
 
-    @Override
     public void populate(Bond bond) {
-        atoms = new Atom[4];
-        atoms[0] = new Carbon(new Vector3f(0, 0, 0));
-        atoms[1] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[0], Bond.DEFAULT_BOND_LENGTH));
-        atoms[2] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[1], Bond.DEFAULT_BOND_LENGTH));
-        atoms[3] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[2], Bond.DEFAULT_BOND_LENGTH));
-
-        Vector3f norm = Vector3f.normalize(Vector3f.subtract(bond.getvLeft(), bond.getvRight()));
-        Vector3f hold = Vector3f.normalize(HYDROGEN_POSITIONS[3]);
-        if (Vector3f.normalize(norm).equals(Vector3f.subtract(new Vector3f(0), hold))) {
-            hold = HYDROGEN_POSITIONS[2];
-            atoms[3] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[3], Bond.DEFAULT_BOND_LENGTH));
-        }
-
-        Vector3f axis = Vector3f.normalize(Vector3f.cross(hold, norm));
-        float angle = (float) Math.toDegrees(Vector3f.angleBetween(hold, norm));
-
-        Vector3f v1 = atoms[1].getPosition();
-        Vector3f v2 = atoms[2].getPosition();
-        Vector3f v3 = atoms[3].getPosition();
-
-        v1 = Vector3f.rotate(v1, angle, axis);
-        v2 = Vector3f.rotate(v2, angle, axis);
-        v3 = Vector3f.rotate(v3, angle, axis);
-
-        Vector3f v0 = bond.getEmptyPosition();
-        v1 = Vector3f.add(v1, v0);
-        v2 = Vector3f.add(v2, v0);
-        v3 = Vector3f.add(v3, v0);
-
-        atoms[0].moveTo(v0);
-        atoms[1].moveTo(v1);
-        atoms[2].moveTo(v2);
-        atoms[3].moveTo(v3);
-
-        bonds = new Bond[3];
-        bonds[0] = new Bond(atoms[0], atoms[1]);
-        bonds[1] = new Bond(atoms[0], atoms[2]);
-        bonds[2] = new Bond(atoms[0], atoms[3]);
-
-        bond.setEmptyAtom(atoms[0]);
-
-        System.out.println(norm);
-        System.out.println(hold);
-        System.out.println(Vector3f.cross(norm, hold) + ", " + axis);
-        System.out.println(angle);
-    }
-
-    public void populate_(Bond bond) {
         atoms = new Atom[4];
         atoms[0] = new Carbon(new Vector3f(0, 0, 0));
         atoms[1] = new Hydrogen(Vector3f.normalize(HYDROGEN_POSITIONS[0], Bond.DEFAULT_BOND_LENGTH));
@@ -118,35 +69,17 @@ public class CarbonSP3 extends FunctionalGroup {
         Vector3f v2 = Vector3f.rotate(atoms[2].getPosition(), rotationAngle, rotationAxis);
         Vector3f v3 = Vector3f.rotate(atoms[3].getPosition(), rotationAngle, rotationAxis);
 
-        // normalize rotation
-        binorm = Vector3f.rotate(HYDROGEN_POSITIONS[position], rotationAngle, rotationAxis);
-        Vector3f bitan = new Vector3f(0, 1, 0);
-        normal = Vector3f.subtract(normal, Vector3f.normalize(bitan, Vector3f.dot(normal,  bitan) * 2));
-        rotationAxis = Vector3f.normalize(Vector3f.cross(binorm, normal));
-        rotationAngle = (float) Math.toDegrees(Math.acos(Vector3f.dot(binorm, normal)
-                * Vector3f.quickInverseSqrt(normal) * Vector3f.quickInverseSqrt(binorm)));
-
-        v1 = Vector3f.rotate(v1, rotationAngle, rotationAxis);
-        v2 = Vector3f.rotate(v2, rotationAngle, rotationAxis);
-        v3 = Vector3f.rotate(v3, rotationAngle, rotationAxis);
-
-        // inverse spin
-        if (Vector3f.subtract(bond.getvLeft(), bond.getvRight()).y > 0) {
-            bitan = new Vector3f(0, -1, 0);
-        }
-        rotationAxis = Vector3f.normalize(Vector3f.cross(v3, bitan));
-        rotationAngle = (float) Math.toDegrees(Math.acos(Vector3f.dot(v3, bitan)
-                * Vector3f.quickInverseSqrt(v3) * Vector3f.quickInverseSqrt(bitan)));
-        v1 = Vector3f.rotate(v1, rotationAngle, rotationAxis);
-        v2 = Vector3f.rotate(v2, rotationAngle, rotationAxis);
-        v3 = Vector3f.rotate(v3, rotationAngle, rotationAxis);
-
-        // retrograde spin
-        rotationAxis = Vector3f.normalize(Vector3f.subtract(bond.getvLeft(), bond.getvRight()));
-        rotationAngle = 180f;
-        v1 = Vector3f.rotate(v1, rotationAngle, rotationAxis);
-        v2 = Vector3f.rotate(v2, rotationAngle, rotationAxis);
-        v3 = Vector3f.rotate(v3, rotationAngle, rotationAxis);
+//        // normalize rotation
+//        binorm = Vector3f.rotate(HYDROGEN_POSITIONS[position], rotationAngle, rotationAxis);
+//        Vector3f bitan = new Vector3f(0, 1, 0);
+//        normal = Vector3f.subtract(normal, Vector3f.normalize(bitan, Vector3f.dot(normal,  bitan) * 2));
+//        rotationAxis = Vector3f.normalize(Vector3f.cross(binorm, normal));
+//        rotationAngle = (float) Math.toDegrees(Math.acos(Vector3f.dot(binorm, normal)
+//                * Vector3f.quickInverseSqrt(normal) * Vector3f.quickInverseSqrt(binorm)));
+//
+//        v1 = Vector3f.rotate(v1, rotationAngle, rotationAxis);
+//        v2 = Vector3f.rotate(v2, rotationAngle, rotationAxis);
+//        v3 = Vector3f.rotate(v3, rotationAngle, rotationAxis);
 
         // translation
         Vector3f v0 = bond.getEmptyPosition();

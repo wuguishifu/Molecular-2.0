@@ -67,9 +67,9 @@ public class Molecular implements Runnable {
         molecule.add(bonds);
 
         FunctionalGroup[] fgs = new FunctionalGroup[]{
-//                new CarbonSP3(bonds[0]),
-//                new CarbonSP3(bonds[1]),
-//                new CarbonSP3(bonds[2]),
+                new CarbonSP3(bonds[0]),
+                new CarbonSP3(bonds[1]),
+                new CarbonSP3(bonds[2]),
                 new CarbonSP3(bonds[3]),
         };
 
