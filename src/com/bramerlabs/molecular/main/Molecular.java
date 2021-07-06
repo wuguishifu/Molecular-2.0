@@ -57,10 +57,10 @@ public class Molecular implements Runnable {
 
         Carbon c1 = new Carbon(sp3.getAtoms()[0].getPosition());
         Bond[] bonds = new Bond[]{
-                new Bond(c1, sp3.getAtoms()[1].getPosition()),
-                new Bond(c1, sp3.getAtoms()[2].getPosition()),
-                new Bond(c1, sp3.getAtoms()[3].getPosition()),
-                new Bond(c1, sp3.getAtoms()[4].getPosition()),
+                new Bond(c1, sp3.getBonds()[0].getEmptyPosition()),
+                new Bond(c1, sp3.getBonds()[1].getEmptyPosition()),
+                new Bond(c1, sp3.getBonds()[2].getEmptyPosition()),
+                new Bond(c1, sp3.getBonds()[3].getEmptyPosition()),
         };
 
         molecule.add(c1);
