@@ -256,6 +256,22 @@ public class Input {
     }
 
     /**
+     * getter method
+     * @return - the array of booleans representing the key presses
+     */
+    public boolean[] getKeysDown() {
+        return this.keys;
+    }
+
+    /**
+     * getter method
+     * @return - the array of booleans representing the button presses
+     */
+    public boolean[] getButtonsDown() {
+        return this.buttons;
+    }
+
+    /**
      * checks if a mouse button is currently down
      * @param button - the button to check
      * @return - true if the button is currently down

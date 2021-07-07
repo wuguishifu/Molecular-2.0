@@ -7,17 +7,10 @@ import com.bramerlabs.engine.io.window.Window;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.MoleculeRenderer;
-import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.atom.common.Carbon;
-import com.bramerlabs.molecular.molecule.atom.common.Hydrogen;
-import com.bramerlabs.molecular.molecule.bond.Bond;
-import com.bramerlabs.molecular.molecule.default_molecules.*;
-import com.bramerlabs.molecular.molecule.functional_groups.CarbonSP3;
-import com.bramerlabs.molecular.molecule.functional_groups.FunctionalGroup;
+import com.bramerlabs.molecular.molecule.default_molecules.Benzaldehyde;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL46;
 
-import java.util.ArrayList;
 
 public class Molecular implements Runnable {
 
@@ -29,6 +22,9 @@ public class Molecular implements Runnable {
     private final Vector3f lightPosition = new Vector3f(0, 100, 0);
 
     boolean canPrint = true;
+    boolean rotate = false;
+    boolean[] keysDown;
+    boolean[] keysDownOld;
 
     // objects to render
     Molecule molecule;
@@ -52,29 +48,7 @@ public class Molecular implements Runnable {
     }
 
     public void initMolecule() {
-        molecule = new Molecule(new Vector3f(0, 0 , 0), new ArrayList<>(), new ArrayList<>());
-        CarbonSP3 sp3 = new CarbonSP3();
-
-        Carbon c1 = new Carbon(sp3.getAtoms()[0].getPosition());
-        Bond[] bonds = new Bond[]{
-                new Bond(c1, sp3.getBonds()[0].getEmptyPosition()),
-                new Bond(c1, sp3.getBonds()[1].getEmptyPosition()),
-                new Bond(c1, sp3.getBonds()[2].getEmptyPosition()),
-                new Bond(c1, sp3.getBonds()[3].getEmptyPosition()),
-        };
-
-        molecule.add(c1);
-        molecule.add(bonds);
-
-        FunctionalGroup[] fgs = new FunctionalGroup[]{
-                new CarbonSP3(bonds[0]),
-                new CarbonSP3(bonds[1]),
-                new CarbonSP3(bonds[2]),
-                new CarbonSP3(bonds[3]),
-        };
-
-        molecule.add(fgs);
-
+        molecule = new Benzaldehyde(new Vector3f(0, 0, 0));
     }
 
     public void init() {
@@ -89,6 +63,10 @@ public class Molecular implements Runnable {
 
         // initialize molecules
         initMolecule();
+
+        // initialize key inputs
+        keysDown = new boolean[GLFW.GLFW_KEY_LAST];
+        keysDownOld = new boolean[GLFW.GLFW_KEY_LAST];
     }
 
     public void update() {
@@ -97,16 +75,20 @@ public class Molecular implements Runnable {
         GL46.glClear(GL46.GL_COLOR_BUFFER_BIT | GL46.GL_DEPTH_BUFFER_BIT);
         camera.updateArcball();
 
-        if (input.isKeyDown(GLFW.GLFW_KEY_P)) {
-            if (canPrint) {
-                canPrint = false;
-                System.out.println(molecule);
-            }
-        } else {
-            canPrint = true;
+        if (rotate) {
+            camera.setHorizontalAngle(camera.getHorizontalAngle() + 0.5f);
         }
 
-//        molecule.update();
+        if (keysDown[GLFW.GLFW_KEY_P] && !keysDownOld[GLFW.GLFW_KEY_P]) {
+            System.out.println(molecule);
+        }
+        if (keysDown[GLFW.GLFW_KEY_R] && !keysDownOld[GLFW.GLFW_KEY_R]) {
+            rotate = !rotate;
+        }
+
+        // copy keys to keys old - for use in single click buttons
+        System.arraycopy(keysDown, 0, keysDownOld, 0, keysDown.length);
+        System.arraycopy(input.getKeysDown(), 0, keysDown, 0, input.getKeysDown().length);
 
     }
 

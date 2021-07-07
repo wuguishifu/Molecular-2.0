@@ -30,12 +30,15 @@ public class Bond {
     private Vector3f[] rotationAxes;
     private float[] rotationAngles;
 
+    boolean hasEmpty;
+
     // makes a single bond
     public Bond(Atom left, Atom right) {
         this.left = left;
         this.right = right;
         this.vLeft = left.getPosition();
         this.vRight = right.getPosition();
+        this.hasEmpty = false;
         recalculateModelComponents();
     }
 
@@ -46,14 +49,17 @@ public class Bond {
         this.order = order;
         this.vLeft = left.getPosition();
         this.vRight = right.getPosition();
+        this.hasEmpty = false;
         recalculateModelComponents();
     }
 
-    public Bond(Atom left, Vector3f vRight) {
+    public Bond(Atom left, Vector3f vRight, int order) {
         this.left = left;
         this.right = null;
+        this.order = order;
         this.vLeft = left.getPosition();
         this.vRight = vRight;
+        this.hasEmpty = true;
         recalculateModelComponents();
     }
 
@@ -78,10 +84,23 @@ public class Bond {
     }
 
     public void setEmptyAtom(Atom atom) {
-        if (this.right == null) {
-            this.right = atom;
-        } else if (this.left == null) {
-            this.left = atom;
+        if (hasEmpty) {
+            if (this.right == null) {
+                this.right = atom;
+            } else if (this.left == null) {
+                this.left = atom;
+            }
+            hasEmpty = false;
+        }
+    }
+
+    public void setEmptyPos(Vector3f empty) {
+        if (hasEmpty) {
+            if (this.right == null) {
+                this.vRight = empty;
+            } else {
+                this.vLeft = empty;
+            }
         }
     }
 
@@ -113,13 +132,6 @@ public class Bond {
                         * Vector3f.quickInverseSqrt(v) * Vector3f.quickInverseSqrt(direct))),
                 0
         };
-
-//        // rotates so the double bonds are normal to <0, 1, 0>
-//        Matrix4f rotationMatrix = Matrix4f.rotate(rotationAngles[0], rotationAxes[0]);
-//        Vector3f binorm = Matrix4f.multiply(rotationMatrix, new Vector4f(1, 0, 0, 0)).xyz();
-//        rotationAxes[1] = Vector3f.normalize(Vector3f.cross(Vector3f.e2, binorm));
-//        rotationAngles[1] = (float) Math.toDegrees(Math.acos(Vector3f.dot(binorm, Vector3f.e2)
-//                * Vector3f.quickInverseSqrt(Vector3f.e2) * Vector3f.quickInverseSqrt(binorm)));
     }
 
     public int getOrder() {
@@ -177,6 +189,14 @@ public class Bond {
 
     public Vector3f getvRight() {
         return vRight;
+    }
+
+    public void setvLeft(Vector3f vLeft) {
+        this.vLeft = vLeft;
+    }
+
+    public void setvRight(Vector3f vRight) {
+        this.vRight = vRight;
     }
 
     private static final float d = 0.4f;
