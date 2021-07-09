@@ -30,6 +30,15 @@ public class Cylinder extends RenderObject {
         super(mesh, position, rotation, scale);
     }
 
+    public Cylinder(Vector3f p1, Vector3f p2, Vector4f color, float radius, boolean sphericalEdges) {
+        super(sphericalEdges ?
+                generateMesh(generateTriangles(p1, p2, radius), color,
+                Sphere.generateTriangles(radius), Sphere.generateTriangles(radius), p1, p2) :
+                generateMesh(generateTriangles(p1, p2, radius), color),
+                new Vector3f(0, 0, 0), new Vector3f(0, 0,0), new Vector3f(1, 1, 1)
+        );
+    }
+
     public static Cylinder getInstance(Vector3f p1, Vector3f p2, Vector4f color, float radius, boolean sphericalEdges) {
         ArrayList<Triangle> triangles = generateTriangles(p1, p2, radius);
 

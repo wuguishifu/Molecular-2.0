@@ -30,6 +30,16 @@ public class Sphere extends RenderObject {
     }
 
     /**
+     * creates a sphere
+     * @param position - the position of the sphere
+     * @param color - the color of the sphere
+     * @param radius - the radius of the sphere
+     */
+    public Sphere(Vector3f position, Vector4f color, float radius) {
+        super(generateMesh(color, radius), position, new Vector3f(0), new Vector3f(1));
+    }
+
+    /**
      * create a sphere
      * @return - a new sphere
      */

@@ -5,8 +5,11 @@ import com.bramerlabs.engine.graphics.Shader;
 import com.bramerlabs.engine.io.window.Input;
 import com.bramerlabs.engine.io.window.Window;
 import com.bramerlabs.engine.math.vector.Vector3f;
+import com.bramerlabs.engine.math.vector.Vector4f;
+import com.bramerlabs.engine.objects.shapes.shapes_3d.Sphere;
 import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.MoleculeRenderer;
+import com.bramerlabs.molecular.molecule.atom.AtomicData;
 import com.bramerlabs.molecular.molecule.default_molecules.Benzaldehyde;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL46;
@@ -28,6 +31,8 @@ public class Molecular implements Runnable {
 
     // objects to render
     Molecule molecule;
+
+    private Sphere sphere;
 
     public static void main(String[] args) {
         new Molecular().start();
@@ -67,6 +72,9 @@ public class Molecular implements Runnable {
         // initialize key inputs
         keysDown = new boolean[GLFW.GLFW_KEY_LAST];
         keysDownOld = new boolean[GLFW.GLFW_KEY_LAST];
+
+        sphere = new Sphere(new Vector3f(0, 0, 0),
+                new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 0.5f);
     }
 
     public void update() {

@@ -6,14 +6,20 @@ import com.bramerlabs.engine.graphics.renderers.Renderer;
 import com.bramerlabs.engine.io.window.Window;
 import com.bramerlabs.engine.math.matrix.Matrix4f;
 import com.bramerlabs.engine.math.vector.Vector3f;
+import com.bramerlabs.engine.math.vector.Vector4f;
 import com.bramerlabs.engine.objects.RenderObject;
+import com.bramerlabs.engine.objects.shapes.shapes_3d.Sphere;
 import com.bramerlabs.molecular.molecule.atom.Atom;
+import com.bramerlabs.molecular.molecule.atom.AtomicData;
 import com.bramerlabs.molecular.molecule.bond.Bond;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
 public class MoleculeRenderer extends Renderer {
+
+    private final Shader colorInstanceShader;
+
     /**
      * default constructor
      *
@@ -22,6 +28,8 @@ public class MoleculeRenderer extends Renderer {
      */
     public MoleculeRenderer(Window window, Vector3f lightPosition) {
         super(window, lightPosition);
+        colorInstanceShader = new Shader("shaders/uniform_color/vertex.glsl",
+                "shaders/uniform_color/fragment.glsl").create();
     }
 
     public void renderMolecule(Molecule molecule, Camera camera, Shader shader) {
@@ -31,6 +39,12 @@ public class MoleculeRenderer extends Renderer {
             }
         }
         for (Atom atom : molecule.getAtoms()) {
+//            Vector4f color = new Vector4f(AtomicData.getCPKColor(atom.getAtomicNumber()), 1.0f);
+//            Vector3f position = atom.getPosition();
+//            float radius = AtomicData.getVDWRadius(atom.getAtomicNumber());
+//            Vector3f scale = new Vector3f(radius, radius, radius);
+//            renderInstancedMesh(AtomicData.getSphere(), position, new Vector3f(0, 0, 0), scale,
+//                    color, camera, colorInstanceShader);
             renderInstancedAtom(molecule.getAtomObject(atom.getAtomicNumber()), camera, shader, atom.getPosition());
         }
     }

@@ -1,6 +1,8 @@
 package com.bramerlabs.molecular.molecule.atom;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
+import com.bramerlabs.engine.math.vector.Vector4f;
+import com.bramerlabs.engine.objects.shapes.shapes_3d.Sphere;
 
 import java.awt.*;
 import java.io.File;
@@ -169,6 +171,7 @@ public class AtomicData {
         initElementNames();
         compileCovalentRadii();
         compileVDWRadii();
+        generateMeshes();
         hasBeenInitialized = true;
     }
 
@@ -194,7 +197,7 @@ public class AtomicData {
         }
     }
 
-    public static void initElementNames() {
+    private static void initElementNames() {
         File file = new File("res/atomic_data/Atomic Names");
         try {
             Scanner input = new Scanner(file);
@@ -207,6 +210,19 @@ public class AtomicData {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static Sphere sphere;
+    private static void generateMeshes() {
+        sphere = Sphere.getInstance(new Vector3f(0.0f, 0.0f, 0.0f),
+                new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 1.0f);
+    }
+
+    public static Sphere getSphere() {
+        if (!hasBeenInitialized) {
+            init();
+        }
+        return sphere;
     }
 
 }
