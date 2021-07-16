@@ -128,8 +128,9 @@ public class Bond {
                 null
         };
         rotationAngles = new float[] {
+//                Vector3f.angleBetween(direct, v),
                 (float) Math.toDegrees(Math.acos(Vector3f.dot(v, direct)
-                        * Vector3f.quickInverseSqrt(v) * Vector3f.quickInverseSqrt(direct))),
+                        * 1/Math.sqrt(Vector3f.length(v)) * 1/Math.sqrt(Vector3f.length(direct)))),
                 0
         };
     }
@@ -224,7 +225,7 @@ public class Bond {
 
     @Override
     public String toString() {
-        return "Bond connecting (" + left + ") and (" + right + ")";
+        return "Bond connecting (" + vLeft + ") and (" + vRight + ") of order " + order;
     }
 
 }
