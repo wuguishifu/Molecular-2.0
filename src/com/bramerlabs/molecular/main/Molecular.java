@@ -5,8 +5,11 @@ import com.bramerlabs.engine.graphics.Shader;
 import com.bramerlabs.engine.io.window.Input;
 import com.bramerlabs.engine.io.window.Window;
 import com.bramerlabs.engine.math.vector.Vector3f;
-import com.bramerlabs.engine.math.vector.Vector4f;
-import com.bramerlabs.engine.objects.shapes.shapes_3d.Sphere;
+import com.bramerlabs.molecular.main.molecule.Molecule;
+import com.bramerlabs.molecular.main.molecule.MoleculeRenderer;
+import com.bramerlabs.molecular.main.molecule.node.Node;
+import com.bramerlabs.molecular.main.molecule.node.atom.Atom;
+import com.bramerlabs.molecular.main.molecule.node.atom.default_atoms.Carbon;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL46;
 
@@ -18,11 +21,12 @@ public class Molecular implements Runnable {
     private Camera camera;
     private Shader shader;
     private final Vector3f lightPosition = new Vector3f(0, 100, 0);
+    private MoleculeRenderer renderer;
 
-    boolean canPrint = true;
-    boolean rotate = false;
     boolean[] keysDown;
     boolean[] keysDownOld;
+
+    private Molecule molecule;
 
     public static void main(String[] args) {
         new Molecular().start();
@@ -43,17 +47,29 @@ public class Molecular implements Runnable {
     }
 
     public void initMolecule() {
-
+        this.molecule = new Molecule();
+        this.molecule.add(new Node(new Vector3f(0, 0, 0), new Carbon()));
+        for (int i = 0; i < 100; i++) {
+             Vector3f position = new Vector3f(
+                     (float) (20 * Math.random() - 10),
+                     (float) (20 * Math.random() - 10),
+                     (float) (20 * Math.random() - 10));
+             int atomicNumber = (int) (118 * Math.random());
+             this.molecule.add(new Node(position, new Atom(atomicNumber)));
+        }
     }
 
     public void init() {
         window.create();
-        shader = new Shader("shaders/default/vertex.glsl",
-                "shaders/default/fragment.glsl").create();
+        shader = new Shader("shaders/uniform_color/vertex.glsl",
+                "shaders/uniform_color/fragment.glsl").create();
         camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), input);
         camera.setFocus(new Vector3f(0, 0, 0));
         camera.setVerticalAngle(-30);
         camera.setDistance(10);
+
+        // initialize renderers
+        renderer = new MoleculeRenderer(window, lightPosition);
 
         // initialize molecules
         initMolecule();
@@ -76,6 +92,9 @@ public class Molecular implements Runnable {
     }
 
     public void render() {
+
+        renderer.renderMolecule(molecule, camera, shader);
+
         window.swapBuffers();
     }
 
