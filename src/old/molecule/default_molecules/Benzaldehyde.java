@@ -1,11 +1,11 @@
-package com.bramerlabs.molecular.molecule.default_molecules;
+package old.molecule.default_molecules;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
-import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.atom.common.Carbon;
-import com.bramerlabs.molecular.molecule.atom.common.Hydrogen;
-import com.bramerlabs.molecular.molecule.atom.common.Oxygen;
-import com.bramerlabs.molecular.molecule.bond.Bond;
+import old.molecule.atom.Atom;
+import old.molecule.atom.common.Carbon;
+import old.molecule.atom.common.Hydrogen;
+import old.molecule.atom.common.Oxygen;
+import old.molecule.bond.Bond;
 
 public class Benzaldehyde extends Benzene {
 

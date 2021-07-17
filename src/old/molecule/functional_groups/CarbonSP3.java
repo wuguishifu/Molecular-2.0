@@ -1,9 +1,9 @@
-package com.bramerlabs.molecular.molecule.functional_groups;
+package old.molecule.functional_groups;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
-import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.atom.common.Carbon;
-import com.bramerlabs.molecular.molecule.bond.Bond;
+import old.molecule.atom.Atom;
+import old.molecule.atom.common.Carbon;
+import old.molecule.bond.Bond;
 
 public class CarbonSP3 extends FunctionalGroup {
 

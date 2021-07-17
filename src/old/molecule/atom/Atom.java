@@ -1,10 +1,10 @@
-package com.bramerlabs.molecular.molecule.atom;
+package old.molecule.atom;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.math.vector.Vector4f;
 import com.bramerlabs.engine.objects.RenderObject;
 import com.bramerlabs.engine.objects.shapes.shapes_3d.Sphere;
-import com.bramerlabs.molecular.molecule.bond.Bond;
+import old.molecule.bond.Bond;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,8 @@
-package com.bramerlabs.molecular.molecule.atom.common;
+package old.molecule.atom.common;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
-import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.atom.AtomicData;
+import old.molecule.atom.Atom;
+import old.molecule.atom.AtomicData;
 
 public class Oxygen extends Atom {
 

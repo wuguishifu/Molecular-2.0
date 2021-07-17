@@ -1,4 +1,4 @@
-package com.bramerlabs.molecular.molecule;
+package old.molecule;
 
 import com.bramerlabs.engine.graphics.Camera;
 import com.bramerlabs.engine.graphics.Shader;
@@ -7,8 +7,8 @@ import com.bramerlabs.engine.io.window.Window;
 import com.bramerlabs.engine.math.matrix.Matrix4f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.objects.RenderObject;
-import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.bond.Bond;
+import old.molecule.atom.Atom;
+import old.molecule.bond.Bond;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;

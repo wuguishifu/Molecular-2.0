@@ -1,7 +1,7 @@
-package com.bramerlabs.molecular.molecule.functional_groups;
+package old.molecule.functional_groups;
 
-import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.bond.Bond;
+import old.molecule.atom.Atom;
+import old.molecule.bond.Bond;
 
 public abstract class FunctionalGroup {
 

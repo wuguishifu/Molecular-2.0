@@ -1,11 +1,11 @@
-package com.bramerlabs.molecular.molecule.bond;
+package old.molecule.bond;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.math.vector.Vector4f;
 import com.bramerlabs.engine.objects.RenderObject;
 import com.bramerlabs.engine.objects.shapes.shapes_3d.Cylinder;
-import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.atom.AtomicData;
+import old.molecule.atom.Atom;
+import old.molecule.atom.AtomicData;
 
 public class Bond {
 

@@ -1,4 +1,4 @@
-package com.bramerlabs.molecular.molecule.atom;
+package old.molecule.atom;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.math.vector.Vector4f;
