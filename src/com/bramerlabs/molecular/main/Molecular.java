@@ -7,9 +7,7 @@ import com.bramerlabs.engine.io.window.Window;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.molecular.main.molecule.Molecule;
 import com.bramerlabs.molecular.main.molecule.MoleculeRenderer;
-import com.bramerlabs.molecular.main.molecule.node.Node;
-import com.bramerlabs.molecular.main.molecule.node.atom.Atom;
-import com.bramerlabs.molecular.main.molecule.node.atom.default_atoms.Carbon;
+import com.bramerlabs.molecular.main.molecule.default_molecules.Benzene;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL46;
 
@@ -47,16 +45,7 @@ public class Molecular implements Runnable {
     }
 
     public void initMolecule() {
-        this.molecule = new Molecule();
-        this.molecule.add(new Node(new Vector3f(0, 0, 0), new Carbon()));
-        for (int i = 0; i < 100; i++) {
-             Vector3f position = new Vector3f(
-                     (float) (20 * Math.random() - 10),
-                     (float) (20 * Math.random() - 10),
-                     (float) (20 * Math.random() - 10));
-             int atomicNumber = (int) (118 * Math.random());
-             this.molecule.add(new Node(position, new Atom(atomicNumber)));
-        }
+        this.molecule = new Benzene();
     }
 
     public void init() {
@@ -92,9 +81,7 @@ public class Molecular implements Runnable {
     }
 
     public void render() {
-
         renderer.renderMolecule(molecule, camera, shader);
-
         window.swapBuffers();
     }
 

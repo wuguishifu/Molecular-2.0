@@ -3,7 +3,6 @@ package com.bramerlabs.molecular.main.molecule.node;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.molecular.main.molecule.node.atom.Atom;
 
-import java.util.ArrayList;
 
 public class Node {
 

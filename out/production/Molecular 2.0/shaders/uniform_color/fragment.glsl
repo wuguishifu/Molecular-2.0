@@ -20,7 +20,7 @@ out vec4 outColor;
 
 void main() {
 
-    vec3 color = vec3(passColor.xyz);
+    vec3 color = passColor.xyz;
     float alpha = passColor.w;
 
     vec3 normal = passNormal;

@@ -111,6 +111,49 @@ public class Renderer {
         GL30.glBindVertexArray(0);
     }
 
+    public void renderInstancedMesh(RenderObject object, Matrix4f model, Matrix4f view, Matrix4f projection,
+                                    Vector4f color, Camera camera, Shader shader) {
+        //bind the vertex array object
+        GL30.glBindVertexArray(object.getMesh().getVAO());
+
+        // enable vertex attributes
+        GL30.glEnableVertexAttribArray(0); // position buffer
+        GL30.glEnableVertexAttribArray(2); // normal buffer
+
+        // bind the index buffer
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, object.getMesh().getIBO());
+
+        // bind the shader
+        shader.bind();
+
+        // set the uniforms
+        shader.setUniform("vModel", model);
+        shader.setUniform("vView", view);
+        shader.setUniform("vProjection", projection);
+        shader.setUniform("lightPos", lightPosition);
+        shader.setUniform("lightLevel", 0.3F);
+        shader.setUniform("viewPos", camera.getPosition());
+        shader.setUniform("lightColor", lightColor);
+        shader.setUniform("reflectiveness", 32);
+        shader.setUniform("passColor", color);
+
+        // draw the triangles making up the mesh
+        GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
+
+        // unbind the shader
+        shader.unbind();
+
+        // unbind the index buffer
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        // disable the vertex attributes
+        GL30.glDisableVertexAttribArray(0); // position buffer
+        GL30.glDisableVertexAttribArray(2); // normal buffer
+
+        // unbind the vertex array object
+        GL30.glBindVertexArray(0);
+    }
+
     public void renderStructuredMesh(RenderObject object, Camera camera, Shader shader, MaterialStructure material, LightStructure light) {
         // bind the vertex array object
         GL30.glBindVertexArray(object.getMesh().getVAO());
