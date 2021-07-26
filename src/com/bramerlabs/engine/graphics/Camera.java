@@ -1,6 +1,7 @@
 package com.bramerlabs.engine.graphics;
 
 import com.bramerlabs.engine.io.window.Input;
+import com.bramerlabs.engine.math.matrix.Matrix4f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -232,6 +233,14 @@ public class Camera {
             this.focus = Vector3f.add(this.focus, Vector3f.normalize(yNormal, moveSpeed * mouseSensitivity * Math.abs(dmy)));
             this.position = Vector3f.add(this.position, Vector3f.normalize(yNormal, moveSpeed * mouseSensitivity * Math.abs(dmy)));
         }
+    }
+
+    /**
+     * getter method
+     * @return - the view matrix for the renderer
+     */
+    public Matrix4f getViewMatrix() {
+        return Matrix4f.view(position, rotation);
     }
 
     /**
