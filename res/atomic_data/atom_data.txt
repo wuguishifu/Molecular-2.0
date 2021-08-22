@@ -1,0 +1,826 @@
+<atom
+	id=1
+	name=Hydrogen
+	abbreviation=H
+	cpk_color=FFFFFF
+	vdw_radius=1.1
+/>
+<atom
+	id=2
+	name=Helium
+	abbreviation=He
+	cpk_color=D9FFFF
+	vdw_radius=1.4
+/>
+<atom
+	id=3
+	name=Lithium
+	abbreviation=Li
+	cpk_color=CC80FF
+	vdw_radius=1.81
+/>
+<atom
+	id=4
+	name=Beryllium
+	abbreviation=Be
+	cpk_color=C2FF00
+	vdw_radius=1.53
+/>
+<atom
+	id=5
+	name=Boron
+	abbreviation=B
+	cpk_color=FFB5B5
+	vdw_radius=1.92
+/>
+<atom
+	id=6
+	name=Carbon
+	abbreviation=C
+	cpk_color=909090
+	vdw_radius=1.7
+/>
+<atom
+	id=7
+	name=Nitrogen
+	abbreviation=N
+	cpk_color=3050F8
+	vdw_radius=1.55
+/>
+<atom
+	id=8
+	name=Oxygen
+	abbreviation=O
+	cpk_color=FF0D0D
+	vdw_radius=1.52
+/>
+<atom
+	id=9
+	name=Fluorine
+	abbreviation=F
+	cpk_color=90E050
+	vdw_radius=1.47
+/>
+<atom
+	id=10
+	name=Neon
+	abbreviation=Ne
+	cpk_color=B3E3F5
+	vdw_radius=1.54
+/>
+<atom
+	id=11
+	name=Sodium
+	abbreviation=Na
+	cpk_color=AB5CF2
+	vdw_radius=2.27
+/>
+<atom
+	id=12
+	name=Magnesium
+	abbreviation=Mg
+	cpk_color=8AFF00
+	vdw_radius=1.73
+/>
+<atom
+	id=13
+	name=Aluminum
+	abbreviation=Al
+	cpk_color=BFA6A6
+	vdw_radius=1.84
+/>
+<atom
+	id=14
+	name=Silicon
+	abbreviation=Si
+	cpk_color=F0C8A0
+	vdw_radius=2.1
+/>
+<atom
+	id=15
+	name=Phosphorus
+	abbreviation=P
+	cpk_color=FF8000
+	vdw_radius=1.8
+/>
+<atom
+	id=16
+	name=Sulfur
+	abbreviation=S
+	cpk_color=FFFF30
+	vdw_radius=1.8
+/>
+<atom
+	id=17
+	name=Chlorine
+	abbreviation=Cl
+	cpk_color=1FF01F
+	vdw_radius=1.75
+/>
+<atom
+	id=18
+	name=Argon
+	abbreviation=Ar
+	cpk_color=80D1E3
+	vdw_radius=1.88
+/>
+<atom
+	id=19
+	name=Potassium
+	abbreviation=K
+	cpk_color=8F40D4
+	vdw_radius=2.75
+/>
+<atom
+	id=20
+	name=Calcium
+	abbreviation=Ca
+	cpk_color=3DFF00
+	vdw_radius=2.31
+/>
+<atom
+	id=21
+	name=Scandium
+	abbreviation=Sc
+	cpk_color=E6E6E6
+	vdw_radius=0.5
+/>
+<atom
+	id=22
+	name=Titanium
+	abbreviation=Ti
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=23
+	name=Vanadium
+	abbreviation=V
+	cpk_color=A6A6AB
+	vdw_radius=0.5
+/>
+<atom
+	id=24
+	name=Chromium
+	abbreviation=Cr
+	cpk_color=8A99C7
+	vdw_radius=0.5
+/>
+<atom
+	id=25
+	name=Manganese
+	abbreviation=Mn
+	cpk_color=9C7AC7
+	vdw_radius=0.5
+/>
+<atom
+	id=26
+	name=Iron
+	abbreviation=Fe
+	cpk_color=E06633
+	vdw_radius=1.7
+/>
+<atom
+	id=27
+	name=Cobalt
+	abbreviation=Co
+	cpk_color=F090A0
+	vdw_radius=0.5
+/>
+<atom
+	id=28
+	name=Nickel
+	abbreviation=Ni
+	cpk_color=50D050
+	vdw_radius=0.5
+/>
+<atom
+	id=29
+	name=Copper
+	abbreviation=Cu
+	cpk_color=C88033
+	vdw_radius=0.5
+/>
+<atom
+	id=30
+	name=Zinc
+	abbreviation=Zn
+	cpk_color=7D80B0
+	vdw_radius=0.5
+/>
+<atom
+	id=31
+	name=Gallium
+	abbreviation=Ga
+	cpk_color=C28F8F
+	vdw_radius=1.87
+/>
+<atom
+	id=32
+	name=Germanium
+	abbreviation=Ge
+	cpk_color=668F8F
+	vdw_radius=2.11
+/>
+<atom
+	id=33
+	name=Arsenic
+	abbreviation=As
+	cpk_color=BD80E3
+	vdw_radius=1.85
+/>
+<atom
+	id=34
+	name=Selenium
+	abbreviation=Se
+	cpk_color=FFA100
+	vdw_radius=1.9
+/>
+<atom
+	id=35
+	name=Bromine
+	abbreviation=Br
+	cpk_color=A62929
+	vdw_radius=1.83
+/>
+<atom
+	id=36
+	name=Krypton
+	abbreviation=Kr
+	cpk_color=5CB8D1
+	vdw_radius=2.02
+/>
+<atom
+	id=37
+	name=Rubidium
+	abbreviation=Rb
+	cpk_color=7A2EB0
+	vdw_radius=3.03
+/>
+<atom
+	id=38
+	name=Strontium
+	abbreviation=Sr
+	cpk_color=00FF00
+	vdw_radius=2.49
+/>
+<atom
+	id=39
+	name=Yttrium
+	abbreviation=Y
+	cpk_color=94FFFF
+	vdw_radius=0.5
+/>
+<atom
+	id=40
+	name=Zirconium
+	abbreviation=Zr
+	cpk_color=94E0E0
+	vdw_radius=0.5
+/>
+<atom
+	id=41
+	name=Niobium
+	abbreviation=Nb
+	cpk_color=73C2C9
+	vdw_radius=0.5
+/>
+<atom
+	id=42
+	name=Molybdenum
+	abbreviation=Mo
+	cpk_color=54B5B5
+	vdw_radius=0.5
+/>
+<atom
+	id=43
+	name=Technetium
+	abbreviation=Tc
+	cpk_color=3B9E9E
+	vdw_radius=0.5
+/>
+<atom
+	id=44
+	name=Ruthenium
+	abbreviation=Ru
+	cpk_color=248F8F
+	vdw_radius=0.5
+/>
+<atom
+	id=45
+	name=Rhodium
+	abbreviation=Rh
+	cpk_color=0A7D8C
+	vdw_radius=0.5
+/>
+<atom
+	id=46
+	name=Palladium
+	abbreviation=Pd
+	cpk_color=006985
+	vdw_radius=0.5
+/>
+<atom
+	id=47
+	name=Silver
+	abbreviation=Ag
+	cpk_color=C0C0C0
+	vdw_radius=0.5
+/>
+<atom
+	id=48
+	name=Cadmium
+	abbreviation=Cd
+	cpk_color=FFD98F
+	vdw_radius=0.5
+/>
+<atom
+	id=49
+	name=Indium
+	abbreviation=In
+	cpk_color=A67573
+	vdw_radius=1.93
+/>
+<atom
+	id=50
+	name=Tin
+	abbreviation=Sn
+	cpk_color=668080
+	vdw_radius=2.17
+/>
+<atom
+	id=51
+	name=Antimony
+	abbreviation=Sb
+	cpk_color=9E63B5
+	vdw_radius=2.06
+/>
+<atom
+	id=52
+	name=Tellurium
+	abbreviation=Te
+	cpk_color=D47A00
+	vdw_radius=2.06
+/>
+<atom
+	id=53
+	name=Iodine
+	abbreviation=I
+	cpk_color=940094
+	vdw_radius=1.98
+/>
+<atom
+	id=54
+	name=Xenon
+	abbreviation=Xe
+	cpk_color=429EB0
+	vdw_radius=2.16
+/>
+<atom
+	id=55
+	name=Cesium
+	abbreviation=Cs
+	cpk_color=57178F
+	vdw_radius=3.43
+/>
+<atom
+	id=56
+	name=Barium
+	abbreviation=Ba
+	cpk_color=00C900
+	vdw_radius=2.68
+/>
+<atom
+	id=57
+	name=Lanthanum
+	abbreviation=La
+	cpk_color=70D4FF
+	vdw_radius=0.5
+/>
+<atom
+	id=58
+	name=Cerium
+	abbreviation=Ce
+	cpk_color=FFFFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=59
+	name=Praseodymium
+	abbreviation=Pr
+	cpk_color=D9FFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=60
+	name=Neodymium
+	abbreviation=Nd
+	cpk_color=C7FFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=61
+	name=Promethium
+	abbreviation=Pm
+	cpk_color=A3FFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=62
+	name=Samarium
+	abbreviation=Sm
+	cpk_color=8FFFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=63
+	name=Europium
+	abbreviation=Eu
+	cpk_color=61FFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=64
+	name=Gadolinium
+	abbreviation=Gd
+	cpk_color=45FFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=65
+	name=Terbium
+	abbreviation=Tb
+	cpk_color=30FFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=66
+	name=Dysprosium
+	abbreviation=Dy
+	cpk_color=1FFFC7
+	vdw_radius=0.5
+/>
+<atom
+	id=67
+	name=Holmium
+	abbreviation=Ho
+	cpk_color=00FF9C
+	vdw_radius=0.5
+/>
+<atom
+	id=68
+	name=Erbium
+	abbreviation=Er
+	cpk_color=00E675
+	vdw_radius=0.5
+/>
+<atom
+	id=69
+	name=Thulium
+	abbreviation=Tm
+	cpk_color=00D452
+	vdw_radius=0.5
+/>
+<atom
+	id=70
+	name=Ytterbium
+	abbreviation=Yb
+	cpk_color=00BF38
+	vdw_radius=0.5
+/>
+<atom
+	id=71
+	name=Lutetium
+	abbreviation=Lu
+	cpk_color=00AB24
+	vdw_radius=0.5
+/>
+<atom
+	id=72
+	name=Hafnium
+	abbreviation=Hf
+	cpk_color=4DC2FF
+	vdw_radius=0.5
+/>
+<atom
+	id=73
+	name=Tantalum
+	abbreviation=Ta
+	cpk_color=4DA6FF
+	vdw_radius=0.5
+/>
+<atom
+	id=74
+	name=Tungsten
+	abbreviation=W
+	cpk_color=2194D6
+	vdw_radius=0.5
+/>
+<atom
+	id=75
+	name=Rhenium
+	abbreviation=Re
+	cpk_color=267DAB
+	vdw_radius=0.5
+/>
+<atom
+	id=76
+	name=Osmium
+	abbreviation=Os
+	cpk_color=266696
+	vdw_radius=0.5
+/>
+<atom
+	id=77
+	name=Iridium
+	abbreviation=Ir
+	cpk_color=175487
+	vdw_radius=0.5
+/>
+<atom
+	id=78
+	name=Platinum
+	abbreviation=Pt
+	cpk_color=D0D0E0
+	vdw_radius=0.5
+/>
+<atom
+	id=79
+	name=Gold
+	abbreviation=Au
+	cpk_color=FFD123
+	vdw_radius=0.5
+/>
+<atom
+	id=80
+	name=Mercury
+	abbreviation=Hg
+	cpk_color=B8B8D0
+	vdw_radius=0.5
+/>
+<atom
+	id=81
+	name=Thallium
+	abbreviation=Tl
+	cpk_color=A6544D
+	vdw_radius=1.96
+/>
+<atom
+	id=82
+	name=Lead
+	abbreviation=Pb
+	cpk_color=575961
+	vdw_radius=2.02
+/>
+<atom
+	id=83
+	name=Bismuth
+	abbreviation=Bi
+	cpk_color=9E4FB5
+	vdw_radius=2.07
+/>
+<atom
+	id=84
+	name=Polonium
+	abbreviation=Po
+	cpk_color=AB5C00
+	vdw_radius=1.97
+/>
+<atom
+	id=85
+	name=Astatine
+	abbreviation=At
+	cpk_color=754F45
+	vdw_radius=2.02
+/>
+<atom
+	id=86
+	name=Radon
+	abbreviation=Rn
+	cpk_color=428296
+	vdw_radius=2.2
+/>
+<atom
+	id=87
+	name=Francium
+	abbreviation=Fr
+	cpk_color=420066
+	vdw_radius=3.48
+/>
+<atom
+	id=88
+	name=Radium
+	abbreviation=Ra
+	cpk_color=007D00
+	vdw_radius=2.83
+/>
+<atom
+	id=89
+	name=Actinium
+	abbreviation=Ac
+	cpk_color=70ABFA
+	vdw_radius=0.5
+/>
+<atom
+	id=90
+	name=Thorium
+	abbreviation=Th
+	cpk_color=00BAFF
+	vdw_radius=0.5
+/>
+<atom
+	id=91
+	name=Protactinium
+	abbreviation=Pa
+	cpk_color=00A1FF
+	vdw_radius=0.5
+/>
+<atom
+	id=92
+	name=Uranium
+	abbreviation=U
+	cpk_color=008FFF
+	vdw_radius=0.5
+/>
+<atom
+	id=93
+	name=Neptunium
+	abbreviation=Np
+	cpk_color=0080FF
+	vdw_radius=0.5
+/>
+<atom
+	id=94
+	name=Plutonium
+	abbreviation=Pu
+	cpk_color=006BFF
+	vdw_radius=0.5
+/>
+<atom
+	id=95
+	name=Americium
+	abbreviation=Am
+	cpk_color=545CF2
+	vdw_radius=0.5
+/>
+<atom
+	id=96
+	name=Curium
+	abbreviation=Cm
+	cpk_color=785CE3
+	vdw_radius=0.5
+/>
+<atom
+	id=97
+	name=Berkelium
+	abbreviation=Bk
+	cpk_color=8A4FE3
+	vdw_radius=0.5
+/>
+<atom
+	id=98
+	name=Californium
+	abbreviation=Cf
+	cpk_color=A136D4
+	vdw_radius=0.5
+/>
+<atom
+	id=99
+	name=Einsteinium
+	abbreviation=Es
+	cpk_color=B31FD4
+	vdw_radius=0.5
+/>
+<atom
+	id=100
+	name=Fermium
+	abbreviation=Fm
+	cpk_color=B31FBA
+	vdw_radius=0.5
+/>
+<atom
+	id=101
+	name=Mendelevium
+	abbreviation=Md
+	cpk_color=B30DA6
+	vdw_radius=0.5
+/>
+<atom
+	id=102
+	name=Nobelium
+	abbreviation=No
+	cpk_color=BD0D87
+	vdw_radius=0.5
+/>
+<atom
+	id=103
+	name=Lawrencium
+	abbreviation=Lr
+	cpk_color=C70066
+	vdw_radius=0.5
+/>
+<atom
+	id=104
+	name=Rutherfordium
+	abbreviation=Rf
+	cpk_color=CC0059
+	vdw_radius=0.5
+/>
+<atom
+	id=105
+	name=Dubnium
+	abbreviation=Db
+	cpk_color=D1004F
+	vdw_radius=0.5
+/>
+<atom
+	id=106
+	name=Seaborgium
+	abbreviation=Sg
+	cpk_color=D90045
+	vdw_radius=0.5
+/>
+<atom
+	id=107
+	name=Bohrium
+	abbreviation=Bh
+	cpk_color=E00038
+	vdw_radius=0.5
+/>
+<atom
+	id=108
+	name=Hassium
+	abbreviation=Hs
+	cpk_color=E6002E
+	vdw_radius=0.5
+/>
+<atom
+	id=109
+	name=Meitnerium
+	abbreviation=Mt
+	cpk_color=EB0026
+	vdw_radius=0.5
+/>
+<atom
+	id=110
+	name=Darmstadtium
+	abbreviation=Ds
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=111
+	name=Roentgenium
+	abbreviation=Rg
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=112
+	name=Copernicium
+	abbreviation=Cn
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=113
+	name=Nihonium
+	abbreviation=Nh
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=114
+	name=Flerovium
+	abbreviation=Fl
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=115
+	name=Moscovium
+	abbreviation=Mc
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=116
+	name=Livermorium
+	abbreviation=Lv
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=117
+	name=Tennessine
+	abbreviation=Ts
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>
+<atom
+	id=118
+	name=Oganesson
+	abbreviation=Og
+	cpk_color=BFC2C7
+	vdw_radius=0.5
+/>

@@ -1,6 +1,7 @@
-package com.bramerlabs.molecular.main;
+package com.bramerlabs.molecular.engine3D.test;
 
 import com.bramerlabs.molecular.engine3D.graphics.Camera;
+import com.bramerlabs.molecular.engine3D.graphics.Material;
 import com.bramerlabs.molecular.engine3D.graphics.Shader;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.Input;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.Window;
@@ -10,36 +11,34 @@ import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
 import com.bramerlabs.molecular.engine3D.objects.Cube;
 import com.bramerlabs.molecular.engine3D.objects.IcoSphere;
-import com.bramerlabs.molecular.molecule.Molecule;
-import com.bramerlabs.molecular.molecule.MoleculeRenderer;
-import com.bramerlabs.molecular.molecule.atom.Atom;
+import org.lwjgl.opengl.GL46;
 
-import java.awt.*;
-import java.util.ArrayList;
+import java.awt.Color;
 
-public class Molecular implements Runnable {
+public class Test implements Runnable {
 
     private final Input input;
     private final Window window;
     private final Camera camera;
 
     private Shader shader;
-    private MoleculeRenderer renderer;
+    private Renderer renderer;
 
-    private Molecule molecule;
+    private IcoSphere sphere;
+    private Cube cube;
 
     public static void main(String[] args) {
-        new Molecular().start();
+        new Test().start();
     }
 
-    public Molecular() {
+    public Test() {
         input = new Input();
-        window = new Window(new WindowConstants("Molecular", new Color(204, 232, 220)), input);
+        window = new Window(new WindowConstants("Test", new Color(204, 232, 220)), input);
         camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), input);
     }
 
     public void start() {
-        Thread main = new Thread(this, "main thread");
+        Thread main = new Thread(this, "Test Thread");
         main.start();
     }
 
@@ -52,49 +51,40 @@ public class Molecular implements Runnable {
         this.close();
     }
 
-    private void initMolecule() {
-        this.molecule = new Molecule(new ArrayList<>(), new ArrayList<>());
-        this.molecule.add(new Atom(new Vector3f(0, 0, 0), new Atom.Data(1, 0)));
-    }
-
     private void init() {
         window.create();
-
-        // initialize camera
         camera.setFocus(new Vector3f(0, 0, 0));
 
-        // initialize shaders
-        shader = new Shader("shaders/molecule/vertex.glsl", "shaders/molecule/fragment.glsl");
+        shader = new Shader("shaders/colored/vertex.glsl", "shaders/colored/fragment.glsl");
         shader.create();
 
-        // initialize renderers
-        renderer = new MoleculeRenderer(window, new Vector3f(5, 20, 10));
+        renderer = new Renderer(window, new Vector3f(5, 20, 10));
 
-        // initialize atom and bond data
-        Atom.DataCompiler.init();
-        Atom.sphere = new IcoSphere(new Vector3f(0), new Vector4f(0), 1.0f);
-        Atom.sphere.createMesh();
+        sphere = new IcoSphere(new Vector3f(-1, 0, 0), new Vector4f(0.5f, 0.5f, 0.5f, 1.0f), 1.0f);
+        sphere.createMesh();
 
-        // initialize molecule
-        initMolecule();
+        cube = new Cube(new Vector3f(1, 0, 0), new Vector3f(0), new Vector3f(1), new Vector4f(0.5f, 0.0f, 0.5f, 1.0f));
+        cube.createMesh();
+
     }
 
     private void update() {
         window.update();
-        window.clear();
+        GL46.glClearColor(window.r, window.g, window.b, 1.0f);
+        GL46.glClear(GL46.GL_COLOR_BUFFER_BIT | GL46.GL_DEPTH_BUFFER_BIT);
         camera.updateArcball();
     }
 
     private void render() {
-        renderer.renderMolecule(molecule, camera, shader);
+        renderer.renderMesh(sphere, camera, shader);
+        renderer.renderMesh(cube, camera, shader);
         window.swapBuffers();
     }
 
     private void close() {
         window.destroy();
         shader.destroy();
-        molecule.destroy();
-        Atom.sphere.destroy();
+        sphere.destroy();
     }
 
 }
