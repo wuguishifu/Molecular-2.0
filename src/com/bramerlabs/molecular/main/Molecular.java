@@ -5,17 +5,15 @@ import com.bramerlabs.molecular.engine3D.graphics.Shader;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.Input;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.Window;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.WindowConstants;
-import com.bramerlabs.molecular.engine3D.graphics.renderers.Renderer;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
-import com.bramerlabs.molecular.engine3D.objects.Cube;
 import com.bramerlabs.molecular.engine3D.objects.IcoSphere;
 import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.atom.Atom;
+import com.bramerlabs.molecular.molecule.default_molecules.Benzene;
 
-import java.awt.*;
-import java.util.ArrayList;
+import java.awt.Color;
 
 public class Molecular implements Runnable {
 
@@ -53,8 +51,7 @@ public class Molecular implements Runnable {
     }
 
     private void initMolecule() {
-        this.molecule = new Molecule(new ArrayList<>(), new ArrayList<>());
-        this.molecule.add(new Atom(new Vector3f(0, 0, 0), new Atom.Data(1, 0)));
+        this.molecule = new Benzene();
     }
 
     private void init() {

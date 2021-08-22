@@ -148,11 +148,7 @@ public class Camera {
         }
 
         // change the camera distance using the scroll wheel
-        if (distance > 0) {
-            distance -= dsy;
-        } else {
-            distance = 0.1f;
-        }
+        distance = Math.max(distance - dsy, 0);
 
         // get the vertical and horizontal distances
         this.horizontalDistance = (float) (distance * Math.cos(Math.toRadians(verticalAngle))); // using formula h = r*cos(theta_x)

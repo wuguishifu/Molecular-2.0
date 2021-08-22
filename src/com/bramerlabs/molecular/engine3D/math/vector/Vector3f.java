@@ -90,6 +90,10 @@ public class Vector3f {
         this.z = c.getBlue() / 255.0f;
     }
 
+    public static Vector3f fromAngle(float angle) {
+        return new Vector3f((float) Math.cos(Math.toRadians(angle)), 0, (float) Math.sin(Math.toRadians(angle)));
+    }
+
     /**
      * sets each component of this vector
      * @param x - the new x component
