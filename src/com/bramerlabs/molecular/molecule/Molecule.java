@@ -10,6 +10,8 @@ public class Molecule {
     public ArrayList<Atom> atoms;
     public ArrayList<Bond> bonds;
 
+    public static int currentID = 0;
+
     public Molecule(ArrayList<Atom> atoms, ArrayList<Bond> bonds) {
         this.atoms = atoms;
         this.bonds = bonds;

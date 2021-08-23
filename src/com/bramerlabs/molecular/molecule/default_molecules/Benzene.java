@@ -3,6 +3,7 @@ package com.bramerlabs.molecular.molecule.default_molecules;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.atom.Atom;
+import com.bramerlabs.molecular.molecule.bond.Bond;
 
 import java.util.ArrayList;
 
@@ -20,9 +21,40 @@ public class Benzene extends Molecule {
     public Benzene() {
         super(new ArrayList<>(), new ArrayList<>());
 
-        for (Vector3f p : positions) {
-            this.add(new Atom(Vector3f.normalize(p, 2), new Atom.Data(6, 0)));
-        }
+        float CC_1 = Bond.DataCompiler.getLength(6, 6, 1) / 100 +
+                2 * Atom.DataCompiler.getRadius(6);
+        float CC_2 = Bond.DataCompiler.getLength(6, 6, 2) / 100 +
+                2 * Atom.DataCompiler.getRadius(6);
+        float CH_1 = Bond.DataCompiler.getLength(6, 1, 1) / 100 +
+                Atom.DataCompiler.getRadius(6) + Atom.DataCompiler.getRadius(1);
+
+        this.add(new Atom(Vector3f.normalize(positions[0], CC_1), new Atom.Data(6, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[1], CC_2), new Atom.Data(6, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[2], CC_1), new Atom.Data(6, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[3], CC_2), new Atom.Data(6, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[4], CC_1), new Atom.Data(6, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[5], CC_2), new Atom.Data(6, 0)));
+
+        this.add(new Bond(atoms.get(0).position, atoms.get(1).position, 1));
+        this.add(new Bond(atoms.get(1).position, atoms.get(2).position, 2));
+        this.add(new Bond(atoms.get(2).position, atoms.get(3).position, 1));
+        this.add(new Bond(atoms.get(3).position, atoms.get(4).position, 2));
+        this.add(new Bond(atoms.get(4).position, atoms.get(5).position, 1));
+        this.add(new Bond(atoms.get(5).position, atoms.get(0).position, 2));
+
+        this.add(new Atom(Vector3f.normalize(positions[0], CC_1 + CH_1), new Atom.Data(1, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[1], CC_2 + CH_1), new Atom.Data(1, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[2], CC_1 + CH_1), new Atom.Data(1, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[3], CC_2 + CH_1), new Atom.Data(1, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[4], CC_1 + CH_1), new Atom.Data(1, 0)));
+        this.add(new Atom(Vector3f.normalize(positions[5], CC_2 + CH_1), new Atom.Data(1, 0)));
+
+        this.add(new Bond(atoms.get(0).position, atoms.get(6).position, 1));
+        this.add(new Bond(atoms.get(1).position, atoms.get(7).position, 1));
+        this.add(new Bond(atoms.get(2).position, atoms.get(8).position, 1));
+        this.add(new Bond(atoms.get(3).position, atoms.get(9).position, 1));
+        this.add(new Bond(atoms.get(4).position, atoms.get(10).position, 1));
+        this.add(new Bond(atoms.get(5).position, atoms.get(11).position, 1));
 
     }
 

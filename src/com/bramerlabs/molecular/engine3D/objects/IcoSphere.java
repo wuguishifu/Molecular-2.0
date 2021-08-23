@@ -3,6 +3,7 @@ package com.bramerlabs.molecular.engine3D.objects;
 import com.bramerlabs.molecular.engine3D.graphics.mesh.ColorMesh;
 import com.bramerlabs.molecular.engine3D.graphics.mesh.Mesh;
 import com.bramerlabs.molecular.engine3D.graphics.vertex.ColorVertex;
+import com.bramerlabs.molecular.engine3D.math.Triangle;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
 
@@ -19,9 +20,9 @@ public class IcoSphere extends RenderObject {
         ColorVertex[] vertices = new ColorVertex[triangles.size() * 3];
         for (int i = 0; i < triangles.size(); i++) {
             Triangle t = triangles.get(i);
-            vertices[3 * i    ] = new ColorVertex(t.getV1(), t.getV1(), color);
-            vertices[3 * i + 1] = new ColorVertex(t.getV2(), t.getV2(), color);
-            vertices[3 * i + 2] = new ColorVertex(t.getV3(), t.getV3(), color);
+            vertices[3 * i    ] = new ColorVertex(t.v1, t.v1, color);
+            vertices[3 * i + 1] = new ColorVertex(t.v2, t.v2, color);
+            vertices[3 * i + 2] = new ColorVertex(t.v3, t.v3, color);
         }
         int[] indices = new int[triangles.size() * 3];
         for (int i = 0; i < triangles.size() * 3; i++) {
@@ -48,26 +49,26 @@ public class IcoSphere extends RenderObject {
 
     public static ArrayList<Triangle> generateTriangles(int depth) {
         ArrayList<Triangle> faces = new ArrayList<>();
-        faces.addAll(subdivide(v[0],  v[2],  v[10], depth));
-        faces.addAll(subdivide(v[0],  v[10], v[5],  depth));
-        faces.addAll(subdivide(v[0],  v[5],  v[4],  depth));
-        faces.addAll(subdivide(v[0],  v[4],  v[8],  depth));
-        faces.addAll(subdivide(v[0],  v[8],  v[2],  depth));
-        faces.addAll(subdivide(v[3],  v[1],  v[11], depth));
-        faces.addAll(subdivide(v[3],  v[11], v[7],  depth));
-        faces.addAll(subdivide(v[3],  v[7],  v[6],  depth));
-        faces.addAll(subdivide(v[3],  v[6],  v[9],  depth));
-        faces.addAll(subdivide(v[3],  v[9],  v[1],  depth));
-        faces.addAll(subdivide(v[2],  v[6],  v[7],  depth));
-        faces.addAll(subdivide(v[2],  v[7],  v[10], depth));
-        faces.addAll(subdivide(v[10], v[7],  v[11], depth));
-        faces.addAll(subdivide(v[10], v[11], v[5],  depth));
-        faces.addAll(subdivide(v[5],  v[11], v[1],  depth));
-        faces.addAll(subdivide(v[5],  v[1],  v[4],  depth));
-        faces.addAll(subdivide(v[4],  v[1],  v[9],  depth));
-        faces.addAll(subdivide(v[4],  v[9],  v[8],  depth));
-        faces.addAll(subdivide(v[8],  v[9],  v[6],  depth));
-        faces.addAll(subdivide(v[8],  v[6],  v[2],  depth));
+        faces.addAll(subdivide(v[0], v[2], v[10], depth));
+        faces.addAll(subdivide(v[0], v[10], v[5], depth));
+        faces.addAll(subdivide(v[0], v[5], v[4], depth));
+        faces.addAll(subdivide(v[0], v[4], v[8], depth));
+        faces.addAll(subdivide(v[0], v[8], v[2], depth));
+        faces.addAll(subdivide(v[3], v[1], v[11], depth));
+        faces.addAll(subdivide(v[3], v[11], v[7], depth));
+        faces.addAll(subdivide(v[3], v[7], v[6], depth));
+        faces.addAll(subdivide(v[3], v[6], v[9], depth));
+        faces.addAll(subdivide(v[3], v[9], v[1], depth));
+        faces.addAll(subdivide(v[2], v[6], v[7], depth));
+        faces.addAll(subdivide(v[2], v[7], v[10], depth));
+        faces.addAll(subdivide(v[10], v[7], v[11], depth));
+        faces.addAll(subdivide(v[10], v[11], v[5], depth));
+        faces.addAll(subdivide(v[5], v[11], v[1], depth));
+        faces.addAll(subdivide(v[5], v[1], v[4], depth));
+        faces.addAll(subdivide(v[4], v[1], v[9], depth));
+        faces.addAll(subdivide(v[4], v[9], v[8], depth));
+        faces.addAll(subdivide(v[8], v[9], v[6], depth));
+        faces.addAll(subdivide(v[8], v[6], v[2], depth));
         return faces;
     }
 

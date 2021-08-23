@@ -62,12 +62,11 @@ public class Camera {
      * sets the ideal position for taking screenshots of benzaldehyde - used for the website
      */
     public void setIdealPosition() {
-        this.verticalDistance = -11.076831f;
-        this.horizontalDistance = 10.114534f;
-        this.distance = 15.0f;
-        this.verticalAngle = -47.6000006f;
-        this.horizontalAngle = -78.2f;
-        this.focus = new Vector3f(1.1676779f, -1.4711119f, 0.15995185f);
+        this.verticalDistance = -10.706814f;
+        this.horizontalDistance = 14.46942f;
+        this.distance = 18.0f;
+        this.verticalAngle = -36.500015f;
+        this.horizontalAngle = 0.3000018f;
     }
 
     /**
@@ -245,6 +244,14 @@ public class Camera {
         this.verticalDistance = DEFAULT_VERTICAL_DISTANCE;
         this.horizontalDistance = DEFAULT_HORIZONTAL_ANGLE;
         this.distance = DEFAULT_DISTANCE;
+    }
+
+    public void printValues() {
+        System.out.println("verticalAngle: " + verticalAngle);
+        System.out.println("horizontalAngle: " + horizontalAngle);
+        System.out.println("distance: " + distance);
+        System.out.println("verticalDistance: " + verticalDistance);
+        System.out.println("horizontalDistance: " + horizontalDistance);
     }
 
     /**
