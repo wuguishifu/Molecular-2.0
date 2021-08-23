@@ -22,22 +22,22 @@ public class Benzene extends Molecule {
     public Benzene() {
         super(new HashMap<>(), new HashMap<>());
 
-        float CC_1 = Bond.DataCompiler.getLength(6, 6, 1) / 100 +
-                2 * Atom.DataCompiler.getRadius(6);
-        float CC_2 = Bond.DataCompiler.getLength(6, 6, 2) / 100 +
-                2 * Atom.DataCompiler.getRadius(6);
-        float CH_1 = Bond.DataCompiler.getLength(6, 1, 1) / 100 +
-                Atom.DataCompiler.getRadius(6) + Atom.DataCompiler.getRadius(1);
+        float CC_1 = Bond.DataCompiler.getLength(Atom.C, Atom.C, 1) / 100 +
+                2 * Atom.DataCompiler.getRadius(Atom.C);
+        float CC_2 = Bond.DataCompiler.getLength(Atom.C, Atom.C, 2) / 100 +
+                2 * Atom.DataCompiler.getRadius(Atom.C);
+        float CH_1 = Bond.DataCompiler.getLength(Atom.C, Atom.H, 1) / 100 +
+                Atom.DataCompiler.getRadius(Atom.C) + Atom.DataCompiler.getRadius(Atom.H);
 
         ArrayList<Atom> atoms = new ArrayList<>();
         ArrayList<Bond> bonds = new ArrayList<>();
 
-        atoms.add(new Atom(Vector3f.normalize(positions[0], CC_1), new Atom.Data(6, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[1], CC_2), new Atom.Data(6, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[2], CC_1), new Atom.Data(6, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[3], CC_2), new Atom.Data(6, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[4], CC_1), new Atom.Data(6, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[5], CC_2), new Atom.Data(6, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[0], CC_1), new Atom.Data(Atom.C, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[1], CC_2), new Atom.Data(Atom.C, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[2], CC_1), new Atom.Data(Atom.C, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[3], CC_2), new Atom.Data(Atom.C, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[4], CC_1), new Atom.Data(Atom.C, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[5], CC_2), new Atom.Data(Atom.C, 0)));
 
         bonds.add(new Bond(atoms.get(0).position, atoms.get(1).position, 1));
         bonds.add(new Bond(atoms.get(1).position, atoms.get(2).position, 2));
@@ -46,12 +46,12 @@ public class Benzene extends Molecule {
         bonds.add(new Bond(atoms.get(4).position, atoms.get(5).position, 1));
         bonds.add(new Bond(atoms.get(5).position, atoms.get(0).position, 2));
 
-        atoms.add(new Atom(Vector3f.normalize(positions[0], CC_1 + CH_1), new Atom.Data(1, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[1], CC_2 + CH_1), new Atom.Data(1, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[2], CC_1 + CH_1), new Atom.Data(1, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[3], CC_2 + CH_1), new Atom.Data(1, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[4], CC_1 + CH_1), new Atom.Data(1, 0)));
-        atoms.add(new Atom(Vector3f.normalize(positions[5], CC_2 + CH_1), new Atom.Data(1, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[0], CC_1 + CH_1), new Atom.Data(Atom.H, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[1], CC_2 + CH_1), new Atom.Data(Atom.H, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[2], CC_1 + CH_1), new Atom.Data(Atom.H, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[3], CC_2 + CH_1), new Atom.Data(Atom.H, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[4], CC_1 + CH_1), new Atom.Data(Atom.H, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[5], CC_2 + CH_1), new Atom.Data(Atom.H, 0)));
 
         bonds.add(new Bond(atoms.get(0).position, atoms.get(6).position, 1));
         bonds.add(new Bond(atoms.get(1).position, atoms.get(7).position, 1));

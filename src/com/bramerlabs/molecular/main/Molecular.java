@@ -124,7 +124,6 @@ public class Molecular implements Runnable {
         }
     }
 
-    ArrayList<Atom> selectedAtoms = new ArrayList<>();
     private void getSelectedAtom() {
         renderer.renderPickingMolecule(molecule, camera, pickingShader);
         GL11.glFlush();
