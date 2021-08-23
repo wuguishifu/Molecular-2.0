@@ -15,7 +15,7 @@ public class Window {
     private String title;
     private static final int framerateCapped = GLFW.GLFW_TRUE;
     private DisplayMode displayMode;
-    private int width, height;
+    public int width, height;
     private int defaultWidth, defaultHeight;
 
     public Vector3f backgroundColor;
@@ -124,6 +124,7 @@ public class Window {
         GLFW.glfwSwapBuffers(windowHandle);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean shouldClose() {
         return GLFW.glfwWindowShouldClose(windowHandle);
     }

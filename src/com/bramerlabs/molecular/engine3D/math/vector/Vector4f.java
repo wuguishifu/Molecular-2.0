@@ -556,6 +556,7 @@ public class Vector4f {
         String yS = df2.format(this.y);
         String zS = df2.format(this.z);
         String wS = df2.format(this.w);
+//        return "(" + x + ", " + y + ", " + z + ", " + w + ")";
         return "(" + xS + ", " + yS + ", " + zS + ", " + wS + ")";
     }
 }

@@ -1,9 +1,9 @@
-package com.bramerlabs.molecular.molecule.bond;
+package com.bramerlabs.molecular.molecule.components.bond;
 
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
 import com.bramerlabs.molecular.engine3D.objects.Cylinder;
-import com.bramerlabs.molecular.molecule.Molecule;
+import com.bramerlabs.molecular.molecule.components.Component;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,27 +11,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Bond {
+public class Bond extends Component {
 
     public Vector3f p1, p2;
     public ArrayList<Cylinder> cylinders;
+    public ArrayList<Cylinder> selectionCylinders;
     public int order;
 
-    public int ID;
-
     public Bond(Vector3f p1, Vector3f p2, int order) {
+        super();
         this.p1 = p1;
         this.p2 = p2;
         this.order = order;
         cylinders = new ArrayList<>();
+        selectionCylinders = new ArrayList<>();
         generateCylinders();
-        this.ID = Molecule.currentID;
-        Molecule.currentID++;
     }
 
     public void generateCylinders() {
 
-        Vector4f color = new Vector4f(0.3f, 0.3f, 0.3f, 1.0f);
+        Vector4f color = new Vector4f(0);
         float radius = 0.2f;
 
         Vector3f normal = new Vector3f(0);
@@ -48,23 +47,35 @@ public class Bond {
             normal = Vector3f.normalize(Vector3f.cross(bondDirection, v0), 0.8f);
         }
 
+        float selectionRadius = radius + 0.1f;
+
         switch (order) {
             case 2:
                 normal.scale(0.5f);
                 cylinders.add(Cylinder.makeCylinder(Vector3f.add(p1, normal), Vector3f.add(p2, normal), color, radius));
                 cylinders.add(Cylinder.makeCylinder(Vector3f.subtract(p1, normal), Vector3f.subtract(p2, normal), color, radius));
+                selectionCylinders.add(Cylinder.makeCylinder(Vector3f.add(p1, normal), Vector3f.add(p2, normal), color, selectionRadius));
+                selectionCylinders.add(Cylinder.makeCylinder(Vector3f.subtract(p1, normal), Vector3f.subtract(p2, normal), color, selectionRadius));
                 break;
             case 3:
                 cylinders.add(Cylinder.makeCylinder(Vector3f.add(p1, normal), Vector3f.add(p2, normal), color, radius));
                 cylinders.add(Cylinder.makeCylinder(Vector3f.subtract(p1, normal), Vector3f.subtract(p2, normal), color, radius));
+                selectionCylinders.add(Cylinder.makeCylinder(Vector3f.add(p1, normal), Vector3f.add(p2, normal), color, selectionRadius));
+                selectionCylinders.add(Cylinder.makeCylinder(Vector3f.subtract(p1, normal), Vector3f.subtract(p2, normal), color, selectionRadius));
             case 1:
                 cylinders.add(Cylinder.makeCylinder(p1, p2, color, radius));
+                selectionCylinders.add(Cylinder.makeCylinder(p1, p2, color, selectionRadius));
                 break;
             default:
                 cylinders.add(Cylinder.makeCylinder(p1, p2, color, radius));
+                selectionCylinders.add(Cylinder.makeCylinder(p1, p2, color, selectionRadius));
         }
 
         for (Cylinder cylinder : cylinders) {
+            cylinder.createMesh();
+        }
+
+        for (Cylinder cylinder : selectionCylinders) {
             cylinder.createMesh();
         }
     }

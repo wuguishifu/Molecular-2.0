@@ -1,28 +1,25 @@
-package com.bramerlabs.molecular.molecule.atom;
+package com.bramerlabs.molecular.molecule.components.atom;
 
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.engine3D.objects.IcoSphere;
-import com.bramerlabs.molecular.molecule.Molecule;
+import com.bramerlabs.molecular.molecule.components.Component;
 
 import java.awt.*;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Atom {
+public class Atom extends Component {
 
     public Vector3f position;
     public Data data;
 
     public static IcoSphere sphere;
 
-    public int ID;
-
     public Atom(Vector3f position, Data data) {
+        super();
         this.position = position;
         this.data = data;
-        this.ID = Molecule.currentID;
-        Molecule.currentID++;
     }
 
     public static class Data {

@@ -10,12 +10,16 @@ import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
 import com.bramerlabs.molecular.engine3D.objects.IcoSphere;
 import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.MoleculeRenderer;
-import com.bramerlabs.molecular.molecule.atom.Atom;
-import com.bramerlabs.molecular.molecule.bond.Bond;
+import com.bramerlabs.molecular.molecule.components.atom.Atom;
+import com.bramerlabs.molecular.molecule.components.bond.Bond;
 import com.bramerlabs.molecular.molecule.default_molecules.Benzene;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 public class Molecular implements Runnable {
 
@@ -27,6 +31,7 @@ public class Molecular implements Runnable {
     private MoleculeRenderer renderer;
 
     private Molecule molecule;
+    private boolean windowShouldSwapBuffers = true;
 
     private boolean[] keysDown, keysDownLast;
     private boolean[] buttonsDown, buttonsDownLast;
@@ -53,6 +58,7 @@ public class Molecular implements Runnable {
             this.update();
             this.handleButtonPresses();
             this.render();
+//            window.close();
         }
         this.close();
     }
@@ -111,11 +117,42 @@ public class Molecular implements Runnable {
         if (keysDown[GLFW.GLFW_KEY_ENTER] && !keysDownLast[GLFW.GLFW_KEY_ENTER]) {
             camera.setIdealPosition();
         }
+
+        if (buttonsDown[GLFW.GLFW_MOUSE_BUTTON_RIGHT] && !buttonsDownLast[GLFW.GLFW_MOUSE_BUTTON_RIGHT]) {
+            windowShouldSwapBuffers = false;
+            getSelectedAtom();
+        }
+    }
+
+    ArrayList<Atom> selectedAtoms = new ArrayList<>();
+    private void getSelectedAtom() {
+        renderer.renderPickingMolecule(molecule, camera, pickingShader);
+        GL11.glFlush();
+        GL11.glFinish();
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        float x = input.getMouseX();
+        float y = input.getMouseY();
+        int height = window.height;
+        y = height - y;
+        ByteBuffer data = BufferUtils.createByteBuffer(3);
+        GL11.glReadPixels((int) x, (int) y, 1, 1, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, data);
+        if (data.get(0) < 0 || data.get(1) < 0 || data.get(2) < 0) {
+            return;
+        }
+
+        Vector3f color = new Vector3f(data.get(0), data.get(1), data.get(2));
+        int ID = MoleculeRenderer.getPickingID(color);
+        molecule.toggleSelection(ID);
+
     }
 
     private void render() {
-        renderer.renderPickingMolecule(molecule, camera, pickingShader);
-        window.swapBuffers();
+        renderer.renderMolecule(molecule, camera, shader);
+        if (windowShouldSwapBuffers) {
+            window.swapBuffers();
+        } else {
+            windowShouldSwapBuffers = true;
+        }
     }
 
     private void close() {
