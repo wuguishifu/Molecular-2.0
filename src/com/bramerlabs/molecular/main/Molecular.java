@@ -13,6 +13,7 @@ import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
 import com.bramerlabs.molecular.molecule.components.bond.Bond;
 import com.bramerlabs.molecular.molecule.default_molecules.Benzene;
+import com.bramerlabs.molecular.molecule.groups.inorganic.Tetrahedral;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -20,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Molecular implements Runnable {
 
@@ -64,7 +66,23 @@ public class Molecular implements Runnable {
     }
 
     private void initMolecule() {
-        this.molecule = new Benzene();
+//        this.molecule = new Benzene();
+        this.molecule = new Molecule(new HashMap<>(), new HashMap<>());
+        Tetrahedral t = new Tetrahedral();
+        for (Atom atom : t.getAtoms()) {
+            molecule.add(atom.ID, atom);
+        }
+        for (Bond bond : t.getBonds()) {
+            molecule.add(bond.ID, bond);
+        }
+        Vector3f position = molecule.getAtoms().get(3).position;
+        t = new Tetrahedral(position, position);
+        for (Atom atom : t.getAtoms()) {
+            molecule.add(atom.ID, atom);
+        }
+        for (Bond bond : t.getBonds()) {
+            molecule.add(bond.ID, bond);
+        }
     }
 
     private void init() {

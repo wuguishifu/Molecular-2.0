@@ -20,6 +20,8 @@ import java.awt.*;
 public class MoleculeRenderer extends Renderer {
 
     Vector4f selectionColor = new Vector4f(0.5f, 0.5f, 0.0f, 0.6f);
+    float reflectiveness = 32.0f;
+    float lightLevel = 0.4f;
 
     public MoleculeRenderer(Window window, Vector3f lightPos) {
         super(window, lightPos);

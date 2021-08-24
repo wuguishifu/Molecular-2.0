@@ -130,6 +130,10 @@ public class Vector3f {
         this.z = z;
     }
 
+    public static Vector3f invert(Vector3f v) {
+        return new Vector3f(-v.x, -v.y, -v.z);
+    }
+
     /**
      * adds values to each component to this vector
      * @param dx - the change in x component
@@ -494,11 +498,11 @@ public class Vector3f {
      */
     public static float quickInverseSqrt(Vector3f v) {
         float val = v.x * v.x + v.y * v.y + v.z * v.z;
-        float xHalf = 0.5f * val;
+        float xHalf = 0.5f * val; // evil floating point bit
         int i = Float.floatToIntBits(val);
-        i = 0x5f3759df - (i >> 1);
+        i = 0x5f3759df - (i >> 1); // what the fuck?
         val = Float.intBitsToFloat(i);
-        val *= (1.5f - xHalf * val * val);
+        val *= (1.5f - xHalf * val * val); // 1st iteration
         return val;
     }
 
@@ -516,11 +520,11 @@ public class Vector3f {
     /**
      * rotates a vector around an axis
      * @param v - the vector to rotate
-     * @param angle - the angle to rotate it by
      * @param axis - the axis to rotate it around
+     * @param angle - the angle to rotate it by
      * @return - the new rotated vector
      */
-    public static Vector3f rotate(Vector3f v, float angle, Vector3f axis) {
+    public static Vector3f rotate(Vector3f v, Vector3f axis, float angle) {
         Matrix4f rotationMatrix = Matrix4f.rotate(angle, axis);
         Vector4f result = Matrix4f.multiply(rotationMatrix, new Vector4f(v, 1.0f));
         return result.xyz();
