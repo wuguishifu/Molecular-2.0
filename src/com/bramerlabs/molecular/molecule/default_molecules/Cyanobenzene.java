@@ -8,7 +8,7 @@ import com.bramerlabs.molecular.molecule.components.bond.Bond;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Benzene extends Molecule {
+public class Cyanobenzene extends Molecule {
 
     private final static Vector3f[] positions = {
             Vector3f.fromAngle(0),
@@ -19,12 +19,13 @@ public class Benzene extends Molecule {
             Vector3f.fromAngle(300)
     };
 
-    public Benzene() {
+    public Cyanobenzene() {
         super(new HashMap<>(), new HashMap<>());
 
         float CC_1 = Bond.DataCompiler.getAdjustedLength(Atom.C, Atom.C, 1);
         float CC_2 = Bond.DataCompiler.getAdjustedLength(Atom.C, Atom.C, 2);
         float CH_1 = Bond.DataCompiler.getAdjustedLength(Atom.C, Atom.H, 1);
+        float CN_3 = Bond.DataCompiler.getAdjustedLength(Atom.C, Atom.N, 3);
 
         ArrayList<Atom> atoms = new ArrayList<>();
         ArrayList<Bond> bonds = new ArrayList<>();
@@ -45,19 +46,24 @@ public class Benzene extends Molecule {
         bonds.add(new Bond(atoms.get(5).position, atoms.get(0).position, 2));
 
         // hydrogens
-        atoms.add(new Atom(Vector3f.normalize(positions[0], CC_1 + CH_1), new Atom.Data(Atom.H, 0)));
         atoms.add(new Atom(Vector3f.normalize(positions[1], CC_2 + CH_1), new Atom.Data(Atom.H, 0)));
         atoms.add(new Atom(Vector3f.normalize(positions[2], CC_1 + CH_1), new Atom.Data(Atom.H, 0)));
         atoms.add(new Atom(Vector3f.normalize(positions[3], CC_2 + CH_1), new Atom.Data(Atom.H, 0)));
         atoms.add(new Atom(Vector3f.normalize(positions[4], CC_1 + CH_1), new Atom.Data(Atom.H, 0)));
         atoms.add(new Atom(Vector3f.normalize(positions[5], CC_2 + CH_1), new Atom.Data(Atom.H, 0)));
 
-        bonds.add(new Bond(atoms.get(0).position, atoms.get(6).position, 1));
-        bonds.add(new Bond(atoms.get(1).position, atoms.get(7).position, 1));
-        bonds.add(new Bond(atoms.get(2).position, atoms.get(8).position, 1));
-        bonds.add(new Bond(atoms.get(3).position, atoms.get(9).position, 1));
-        bonds.add(new Bond(atoms.get(4).position, atoms.get(10).position, 1));
-        bonds.add(new Bond(atoms.get(5).position, atoms.get(11).position, 1));
+        bonds.add(new Bond(atoms.get(1).position, atoms.get(6).position, 1));
+        bonds.add(new Bond(atoms.get(2).position, atoms.get(7).position, 1));
+        bonds.add(new Bond(atoms.get(3).position, atoms.get(8).position, 1));
+        bonds.add(new Bond(atoms.get(4).position, atoms.get(9).position, 1));
+        bonds.add(new Bond(atoms.get(5).position, atoms.get(10).position, 1));
+
+        // cyanide group
+        atoms.add(new Atom(Vector3f.normalize(positions[0], CC_1 + CC_1), new Atom.Data(Atom.C, 0)));
+        atoms.add(new Atom(Vector3f.normalize(positions[0], CC_1 + CC_1 + CN_3), new Atom.Data(Atom.N, 0)));
+
+        bonds.add(new Bond(atoms.get(0).position, atoms.get(11).position, 1));
+        bonds.add(new Bond(atoms.get(11).position, atoms.get(12).position, 3));
 
         for (Atom atom : atoms) {
             this.add(atom);

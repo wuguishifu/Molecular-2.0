@@ -7,20 +7,20 @@ import com.bramerlabs.molecular.engine3D.graphics.io.window.Window;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.WindowConstants;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
+import com.bramerlabs.molecular.engine3D.objects.Cylinder;
 import com.bramerlabs.molecular.engine3D.objects.IcoSphere;
 import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
 import com.bramerlabs.molecular.molecule.components.bond.Bond;
-import com.bramerlabs.molecular.molecule.default_molecules.Benzene;
-import com.bramerlabs.molecular.molecule.groups.inorganic.Tetrahedral;
+import com.bramerlabs.molecular.molecule.default_molecules.Cyanobenzene;
+import com.bramerlabs.molecular.molecule.groups.FunctionalGroup;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Molecular implements Runnable {
@@ -66,23 +66,25 @@ public class Molecular implements Runnable {
     }
 
     private void initMolecule() {
-//        this.molecule = new Benzene();
         this.molecule = new Molecule(new HashMap<>(), new HashMap<>());
-        Tetrahedral t = new Tetrahedral();
-        for (Atom atom : t.getAtoms()) {
-            molecule.add(atom.ID, atom);
-        }
-        for (Bond bond : t.getBonds()) {
-            molecule.add(bond.ID, bond);
-        }
-        Vector3f position = molecule.getAtoms().get(3).position;
-        t = new Tetrahedral(position, position);
-        for (Atom atom : t.getAtoms()) {
-            molecule.add(atom.ID, atom);
-        }
-        for (Bond bond : t.getBonds()) {
-            molecule.add(bond.ID, bond);
-        }
+        molecule.add(new Atom(new Vector3f(0, 0, 0), new Atom.Data(Atom.C, 0)));
+        FunctionalGroup.addGroup(molecule, FunctionalGroup.TETRAHEDRAL, new Vector3f(0, 0, 0),
+                new Vector3f(0, 1, 0), 0);
+        molecule.add(new Bond(molecule.getAtoms().get(0).position, molecule.getAtoms().get(1).position, 1));
+
+        Vector3f p = new Vector3f(3.28f, 6.56f, 3.28f);
+        Vector3f a = new Vector3f(0, 4.92f, 0);
+        Vector3f q = Vector3f.subtract(p, a);
+        FunctionalGroup.addGroup(molecule, FunctionalGroup.TETRAHEDRAL, a, q, 60);
+
+        p = new Vector3f(3.28f, 11.48f, 3.28f);
+        a = new Vector3f(3.28f, 6.65f, 3.28f);
+        q = Vector3f.subtract(p, a);
+        FunctionalGroup.addGroup(molecule, FunctionalGroup.TETRAHEDRAL, a, q, 0);
+
+        molecule = new Cyanobenzene();
+        camera.setFocus(molecule.getCenter());
+
     }
 
     private void init() {
@@ -105,6 +107,10 @@ public class Molecular implements Runnable {
         Bond.DataCompiler.init();
         Atom.sphere = new IcoSphere(new Vector3f(0), new Vector4f(0), 1.0f);
         Atom.sphere.createMesh();
+
+        Bond.cylinder = new Cylinder(new Vector3f(0), new Vector3f(1, 0, 0),
+                new Vector4f(1, 1, 1, 1), 0.2f);
+        Bond.cylinder.createMesh();
 
         // initialize mouse and key listeners
         keysDown = new boolean[GLFW.GLFW_KEY_LAST];
@@ -160,11 +166,11 @@ public class Molecular implements Runnable {
         Vector3f color = new Vector3f(data.get(0), data.get(1), data.get(2));
         int ID = MoleculeRenderer.getPickingID(color);
         molecule.toggleSelection(ID);
-
     }
 
     private void render() {
         renderer.renderMolecule(molecule, camera, shader);
+//        renderer.renderPickingMolecule(molecule, camera, pickingShader);
         if (windowShouldSwapBuffers) {
             window.swapBuffers();
         } else {
@@ -175,8 +181,8 @@ public class Molecular implements Runnable {
     private void close() {
         window.destroy();
         shader.destroy();
-        molecule.destroy();
         Atom.sphere.destroy();
+        Bond.cylinder.destroy();
     }
 
 }

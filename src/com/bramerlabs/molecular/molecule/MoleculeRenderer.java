@@ -8,7 +8,6 @@ import com.bramerlabs.molecular.engine3D.graphics.renderers.Renderer;
 import com.bramerlabs.molecular.engine3D.math.matrix.Matrix4f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
-import com.bramerlabs.molecular.engine3D.objects.Cylinder;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
 import com.bramerlabs.molecular.molecule.components.bond.Bond;
 import org.lwjgl.opengl.GL11;
@@ -38,12 +37,12 @@ public class MoleculeRenderer extends Renderer {
         // render selections
         for (Atom atom : molecule.getAtoms().values()) {
             if (atom.selected) {
-                renderSelectionAtom(atom, camera, shader);
+                renderHighlightedAtom(atom, camera, shader);
             }
         }
         for (Bond bond : molecule.getBonds().values()) {
             if (bond.selected) {
-                renderSelectionBond(bond, camera, shader);
+                renderHighlightedBond(bond, camera, shader);
             }
         }
     }
@@ -61,12 +60,15 @@ public class MoleculeRenderer extends Renderer {
         float radius = Atom.DataCompiler.getRadius(atom.data.atomicNumber);
         Vector4f color = new Vector4f(new Vector3f(Atom.DataCompiler.getColor(atom.data.atomicNumber)), 1.0f);
 
+        Matrix4f vModel = Matrix4f.transform(atom.position, new Vector3f[]{}, new float[]{}, new Vector3f(radius));
+
         GL30.glBindVertexArray(Atom.sphere.getMesh().getVao());
         GL30.glEnableVertexAttribArray(Mesh.POSITION);
         GL30.glEnableVertexAttribArray(Mesh.NORMAL);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, Atom.sphere.getMesh().getIbo());
         shader.bind();
-        shader.setUniform("vModel", Matrix4f.transform(atom.position, Vector3f.zero, new Vector3f(radius)));
+//        shader.setUniform("vModel", Matrix4f.transform(atom.position, Vector3f.zero, new Vector3f(radius)));
+        shader.setUniform("vModel", vModel);
         shader.setUniform("vView", Matrix4f.view(camera.getPosition(), camera.getRotation()));
         shader.setUniform("vProjection", super.window.getProjectionMatrix());
         shader.setUniform("meshColor", color);
@@ -86,13 +88,13 @@ public class MoleculeRenderer extends Renderer {
     public void renderBond(Bond bond, Camera camera, Shader shader) {
         Vector4f color = new Vector4f(0.3f, 0.3f, 0.3f, 1.0f);
 
-        for (Cylinder cylinder : bond.cylinders) {
-            GL30.glBindVertexArray(cylinder.getMesh().getVao());
+        for (Matrix4f vModel : bond.modelMatrices) {
+            GL30.glBindVertexArray(Bond.cylinder.getMesh().getVao());
             GL30.glEnableVertexAttribArray(Mesh.POSITION);
             GL30.glEnableVertexAttribArray(Mesh.NORMAL);
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, cylinder.getMesh().getIbo());
+            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, Bond.cylinder.getMesh().getIbo());
             shader.bind();
-            shader.setUniform("vModel", Matrix4f.transform(Vector3f.zero, Vector3f.zero, Vector3f.one));
+            shader.setUniform("vModel", vModel);
             shader.setUniform("vView", Matrix4f.view(camera.getPosition(), camera.getRotation()));
             shader.setUniform("vProjection", super.window.getProjectionMatrix());
             shader.setUniform("meshColor", color);
@@ -110,7 +112,7 @@ public class MoleculeRenderer extends Renderer {
         }
     }
 
-    public void renderSelectionAtom(Atom atom, Camera camera, Shader shader) {
+    public void renderHighlightedAtom(Atom atom, Camera camera, Shader shader) {
         float radius = Atom.DataCompiler.getRadius(atom.data.atomicNumber) + 0.2f;
 
         GL30.glBindVertexArray(Atom.sphere.getMesh().getVao());
@@ -135,15 +137,14 @@ public class MoleculeRenderer extends Renderer {
         GL30.glBindVertexArray(0);
     }
 
-    public void renderSelectionBond(Bond bond, Camera camera, Shader shader) {
-
-        for (Cylinder cylinder : bond.selectionCylinders) {
-            GL30.glBindVertexArray(cylinder.getMesh().getVao());
+    public void renderHighlightedBond(Bond bond, Camera camera, Shader shader) {
+        for (Matrix4f vModel : bond.highlightModelMatrices) {
+            GL30.glBindVertexArray(Bond.cylinder.getMesh().getVao());
             GL30.glEnableVertexAttribArray(Mesh.POSITION);
             GL30.glEnableVertexAttribArray(Mesh.NORMAL);
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, cylinder.getMesh().getIbo());
+            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, Bond.cylinder.getMesh().getIbo());
             shader.bind();
-            shader.setUniform("vModel", Matrix4f.transform(Vector3f.zero, Vector3f.zero, Vector3f.one));
+            shader.setUniform("vModel", vModel);
             shader.setUniform("vView", Matrix4f.view(camera.getPosition(), camera.getRotation()));
             shader.setUniform("vProjection", super.window.getProjectionMatrix());
             shader.setUniform("meshColor", selectionColor);
@@ -183,12 +184,12 @@ public class MoleculeRenderer extends Renderer {
     public void renderPickingBond(Bond bond, Camera camera, Shader shader) {
         Vector4f color = getPickingColor(bond.ID);
 
-        for (Cylinder cylinder : bond.cylinders) {
-            GL30.glBindVertexArray(cylinder.getMesh().getVao());
+        for (Matrix4f vModel : bond.modelMatrices) {
+            GL30.glBindVertexArray(Bond.cylinder.getMesh().getVao());
             GL30.glEnableVertexAttribArray(Mesh.POSITION);
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, cylinder.getMesh().getIbo());
+            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, Bond.cylinder.getMesh().getIbo());
             shader.bind();
-            shader.setUniform("vModel", Matrix4f.transform(Vector3f.zero, Vector3f.zero, Vector3f.one));
+            shader.setUniform("vModel", vModel);
             shader.setUniform("vView", Matrix4f.view(camera.getPosition(), camera.getRotation()));
             shader.setUniform("vProjection", super.window.getProjectionMatrix());
             shader.setUniform("pickingColor", color);

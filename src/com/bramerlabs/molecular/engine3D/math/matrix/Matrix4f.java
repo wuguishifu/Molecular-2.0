@@ -5,6 +5,7 @@ import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Matrix4f {
@@ -130,6 +131,18 @@ public class Matrix4f {
         Matrix4f scaleMatrix = Matrix4f.scale(scale);
 
         // combine all matrices into one transformation matrix
+        return Matrix4f.multiply(Matrix4f.multiply(scaleMatrix, rotationMatrix), translationMatrix);
+    }
+
+    public static Matrix4f transform(Vector3f position, Vector3f[] rotationAxes, float[] angles, Vector3f scale) {
+        Matrix4f translationMatrix = Matrix4f.translate(position);
+        Matrix4f rotationMatrix = Matrix4f.identity();
+        for (int i = 0; i < rotationAxes.length; i++) {
+            if (rotationAxes[i] != null) {
+                rotationMatrix = Matrix4f.multiply(rotationMatrix, Matrix4f.rotate(angles[i], rotationAxes[i]));
+            }
+        }
+        Matrix4f scaleMatrix = Matrix4f.scale(scale);
         return Matrix4f.multiply(Matrix4f.multiply(scaleMatrix, rotationMatrix), translationMatrix);
     }
 
