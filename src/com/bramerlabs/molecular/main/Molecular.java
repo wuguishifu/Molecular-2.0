@@ -66,25 +66,9 @@ public class Molecular implements Runnable {
     }
 
     private void initMolecule() {
-        this.molecule = new Molecule(new HashMap<>(), new HashMap<>());
-        molecule.add(new Atom(new Vector3f(0, 0, 0), new Atom.Data(Atom.C, 0)));
-        FunctionalGroup.addGroup(molecule, FunctionalGroup.TETRAHEDRAL, new Vector3f(0, 0, 0),
-                new Vector3f(0, 1, 0), 0);
-        molecule.add(new Bond(molecule.getAtoms().get(0).position, molecule.getAtoms().get(1).position, 1));
-
-        Vector3f p = new Vector3f(3.28f, 6.56f, 3.28f);
-        Vector3f a = new Vector3f(0, 4.92f, 0);
-        Vector3f q = Vector3f.subtract(p, a);
-        FunctionalGroup.addGroup(molecule, FunctionalGroup.TETRAHEDRAL, a, q, 60);
-
-        p = new Vector3f(3.28f, 11.48f, 3.28f);
-        a = new Vector3f(3.28f, 6.65f, 3.28f);
-        q = Vector3f.subtract(p, a);
-        FunctionalGroup.addGroup(molecule, FunctionalGroup.TETRAHEDRAL, a, q, 0);
-
         molecule = new Cyanobenzene();
         camera.setFocus(molecule.getCenter());
-
+        molecule.bondMap.print();
     }
 
     private void init() {

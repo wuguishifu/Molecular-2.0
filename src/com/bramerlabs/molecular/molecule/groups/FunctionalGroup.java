@@ -53,7 +53,7 @@ public class FunctionalGroup {
         }
 
         for (int i = 1; i < atoms.size(); i++) {
-            bonds.add(new Bond(atoms.get(0).position, atoms.get(i).position, 1));
+//            bonds.add(new Bond(atoms.get(0).position, atoms.get(i).position, 1));
         }
 
         for (Atom atom : atoms) {
@@ -61,7 +61,7 @@ public class FunctionalGroup {
         }
 
         for (Bond bond : bonds) {
-            molecule.add(bond);
+//            molecule.add(bond);
         }
 
 //        molecule.add(new Bond(new Vector3f(0, 0, 0), atoms.get(0).position, 1));

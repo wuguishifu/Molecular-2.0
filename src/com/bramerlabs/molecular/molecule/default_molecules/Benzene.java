@@ -37,12 +37,12 @@ public class Benzene extends Molecule {
         atoms.add(new Atom(Vector3f.normalize(positions[4], CC_1), new Atom.Data(Atom.C, 0)));
         atoms.add(new Atom(Vector3f.normalize(positions[5], CC_2), new Atom.Data(Atom.C, 0)));
 
-        bonds.add(new Bond(atoms.get(0).position, atoms.get(1).position, 1));
-        bonds.add(new Bond(atoms.get(1).position, atoms.get(2).position, 2));
-        bonds.add(new Bond(atoms.get(2).position, atoms.get(3).position, 1));
-        bonds.add(new Bond(atoms.get(3).position, atoms.get(4).position, 2));
-        bonds.add(new Bond(atoms.get(4).position, atoms.get(5).position, 1));
-        bonds.add(new Bond(atoms.get(5).position, atoms.get(0).position, 2));
+//        bonds.add(new Bond(atoms.get(0).position, atoms.get(1).position, 1));
+//        bonds.add(new Bond(atoms.get(1).position, atoms.get(2).position, 2));
+//        bonds.add(new Bond(atoms.get(2).position, atoms.get(3).position, 1));
+//        bonds.add(new Bond(atoms.get(3).position, atoms.get(4).position, 2));
+//        bonds.add(new Bond(atoms.get(4).position, atoms.get(5).position, 1));
+//        bonds.add(new Bond(atoms.get(5).position, atoms.get(0).position, 2));
 
         // hydrogens
         atoms.add(new Atom(Vector3f.normalize(positions[0], CC_1 + CH_1), new Atom.Data(Atom.H, 0)));
@@ -52,21 +52,16 @@ public class Benzene extends Molecule {
         atoms.add(new Atom(Vector3f.normalize(positions[4], CC_1 + CH_1), new Atom.Data(Atom.H, 0)));
         atoms.add(new Atom(Vector3f.normalize(positions[5], CC_2 + CH_1), new Atom.Data(Atom.H, 0)));
 
-        bonds.add(new Bond(atoms.get(0).position, atoms.get(6).position, 1));
-        bonds.add(new Bond(atoms.get(1).position, atoms.get(7).position, 1));
-        bonds.add(new Bond(atoms.get(2).position, atoms.get(8).position, 1));
-        bonds.add(new Bond(atoms.get(3).position, atoms.get(9).position, 1));
-        bonds.add(new Bond(atoms.get(4).position, atoms.get(10).position, 1));
-        bonds.add(new Bond(atoms.get(5).position, atoms.get(11).position, 1));
+//        bonds.add(new Bond(atoms.get(0).position, atoms.get(6).position, 1));
+//        bonds.add(new Bond(atoms.get(1).position, atoms.get(7).position, 1));
+//        bonds.add(new Bond(atoms.get(2).position, atoms.get(8).position, 1));
+//        bonds.add(new Bond(atoms.get(3).position, atoms.get(9).position, 1));
+//        bonds.add(new Bond(atoms.get(4).position, atoms.get(10).position, 1));
+//        bonds.add(new Bond(atoms.get(5).position, atoms.get(11).position, 1));
 
         for (Atom atom : atoms) {
             this.add(atom);
         }
-
-        for (Bond bond : bonds) {
-            this.add(bond);
-        }
-
     }
 
 }

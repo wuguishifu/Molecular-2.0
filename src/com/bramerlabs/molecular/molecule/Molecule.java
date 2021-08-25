@@ -1,22 +1,23 @@
 package com.bramerlabs.molecular.molecule;
 
-import com.bramerlabs.molecular.engine3D.math.map.BiHashMap;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
 import com.bramerlabs.molecular.molecule.components.bond.Bond;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Molecule {
 
     public HashMap<Integer, Atom> atoms;
     public HashMap<Integer, Bond> bonds;
-    public BiHashMap<Integer, Integer, Integer> bondMap;
+
+    public BondMap bondMap;
 
     public Molecule(HashMap<Integer, Atom> atoms, HashMap<Integer, Bond> bonds) {
         this.atoms = atoms;
         this.bonds = bonds;
-        bondMap = new BiHashMap<>();
+        this.bondMap = new BondMap();
     }
 
     public void toggleSelection(int ID) {
@@ -63,6 +64,17 @@ public class Molecule {
         return false;
     }
 
+    public void addBond(Atom a1, Atom a2, int order) {
+        Bond bond = new Bond(a1, a2, order);
+        bonds.put(bond.ID, bond);
+        bondMap.add(a1.ID, a2.ID, order);
+    }
+
+    public ArrayList<Atom> getConnectedAtoms(Atom a1) {
+        int id = a1.ID;
+        return null;
+    }
+
     public HashMap<Integer, Atom> getAtoms() {
         return this.atoms;
     }
@@ -73,10 +85,6 @@ public class Molecule {
 
     public void add(Atom atom) {
         this.atoms.put(atom.ID, atom);
-    }
-
-    public void add(Bond bond) {
-        this.bonds.put(bond.ID, bond);
     }
 
     public void remove(int ID) {

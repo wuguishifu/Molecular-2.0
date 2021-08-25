@@ -1,5 +1,6 @@
 package com.bramerlabs.molecular.engine3D.math.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +54,16 @@ public class BiHashMap <K1, K2, V> {
      */
     public boolean containsKeys(K1 key1, K2 key2) {
         return bimap.containsKey(key1) && bimap.get(key1).containsKey(key2);
+    }
+
+    /**
+     *
+     * @param key the key to detect
+     * @return true if this map contains the key <code>key</code>
+     * @see Map#containsKey(Object)
+     */
+    public boolean containsKey(K1 key) {
+        return bimap.containsKey(key);
     }
 
     /**

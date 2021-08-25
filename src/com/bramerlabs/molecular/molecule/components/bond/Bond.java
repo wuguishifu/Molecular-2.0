@@ -15,6 +15,7 @@ import java.util.Scanner;
 public class Bond extends Component {
 
     public Vector3f p1, p2;
+    public int atomID1, atomID2;
     public int order;
 
     public Vector3f axial;
@@ -28,10 +29,11 @@ public class Bond extends Component {
     public Matrix4f[] modelMatrices;
     public Matrix4f[] highlightModelMatrices;
 
-    public Bond(Vector3f p1, Vector3f p2, int order) {
-        super();
-        this.p1 = p1;
-        this.p2 = p2;
+    public Bond(Atom a1, Atom a2, int order) {
+        this.atomID1 = a1.ID;
+        this.atomID2 = a2.ID;
+        this.p1 = a1.position;
+        this.p2 = a2.position;
         this.order = order;
         this.generateModelMatrices();
     }
