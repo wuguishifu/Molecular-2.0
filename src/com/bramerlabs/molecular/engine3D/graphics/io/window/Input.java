@@ -15,6 +15,9 @@ public class Input {
     private boolean[] keysDown = new boolean[GLFW.GLFW_KEY_LAST];
     private boolean[] buttonsDown = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
 
+    private boolean[] keysDownLast = new boolean[GLFW.GLFW_KEY_LAST];
+    private boolean[] buttonsDownLast = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
+
     private float mouseX, mouseY;
     private float scrollX, scrollY;
     private int windowX, windowY;
@@ -25,6 +28,7 @@ public class Input {
         keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
+                keysDownLast[key] = keysDown[key];
                 keysDown[key] = (action != GLFW.GLFW_RELEASE);
             }
         };
@@ -32,6 +36,7 @@ public class Input {
         mouseButtonCallback = new GLFWMouseButtonCallback() {
             @Override
             public void invoke(long window, int button, int action, int mods) {
+                buttonsDownLast[button] = buttonsDown[button];
                 buttonsDown[button] = (action != GLFW.GLFW_RELEASE);
             }
         };

@@ -123,14 +123,13 @@ public class Molecular implements Runnable {
     }
 
     private void handleButtonPresses() {
-        if (keysDown[GLFW.GLFW_KEY_P] && !keysDownLast[GLFW.GLFW_KEY_P]) {
+        if (keyPressed(GLFW.GLFW_KEY_P)) {
             camera.printValues();
         }
-        if (keysDown[GLFW.GLFW_KEY_ENTER] && !keysDownLast[GLFW.GLFW_KEY_ENTER]) {
+        if (keyPressed(GLFW.GLFW_KEY_ENTER)) {
             camera.setIdealPosition();
         }
-
-        if (buttonsDown[GLFW.GLFW_MOUSE_BUTTON_RIGHT] && !buttonsDownLast[GLFW.GLFW_MOUSE_BUTTON_RIGHT]) {
+        if (buttonPressed(GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
             windowShouldSwapBuffers = false;
             getSelectedAtom();
         }
@@ -172,7 +171,6 @@ public class Molecular implements Runnable {
 
     private void render() {
         renderer.renderMolecule(molecule, camera, shader);
-//        renderer.renderPickingMolecule(molecule, camera, pickingShader);
         if (windowShouldSwapBuffers) {
             window.swapBuffers();
         } else {
@@ -185,6 +183,22 @@ public class Molecular implements Runnable {
         shader.destroy();
         Atom.sphere.destroy();
         Bond.cylinder.destroy();
+    }
+
+    public boolean keyPressed(int key) {
+        return keysDown[key] && !keysDownLast[key];
+    }
+
+    public boolean keyReleased(int key) {
+        return !keysDown[key] && keysDownLast[key];
+    }
+
+    public boolean buttonPressed(int button) {
+        return buttonsDown[button] && !buttonsDownLast[button];
+    }
+
+    public boolean buttonReleased(int button) {
+        return !buttonsDown[button] && buttonsDownLast[button];
     }
 
 }
