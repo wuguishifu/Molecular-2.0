@@ -66,7 +66,11 @@ public class Molecular implements Runnable {
     }
 
     private void initMolecule() {
-        molecule = new Cyanobenzene();
+
+        molecule = new Molecule();
+        FunctionalGroup.createGroup(molecule, FunctionalGroup.TETRAHEDRAL, new Vector3f(0, 1, 0), 0);
+
+//        molecule = new Cyanobenzene();
         camera.setFocus(molecule.getCenter());
         molecule.bondMap.print();
     }
@@ -143,13 +147,27 @@ public class Molecular implements Runnable {
         y = height - y;
         ByteBuffer data = BufferUtils.createByteBuffer(3);
         GL11.glReadPixels((int) x, (int) y, 1, 1, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, data);
-        if (data.get(0) < 0 || data.get(1) < 0 || data.get(2) < 0) {
-            return;
+        Vector3f color = new Vector3f(data.get(0), data.get(1), data.get(2));
+        if (color.x < 0) {
+            color.x += 256;
+        }
+        if (color.y < 0) {
+            color.y += 256;
+        }
+        if (color.z < 0) {
+            color.z += 256;
         }
 
-        Vector3f color = new Vector3f(data.get(0), data.get(1), data.get(2));
         int ID = MoleculeRenderer.getPickingID(color);
-        molecule.toggleSelection(ID);
+//        molecule.toggleSelection(ID);
+
+        if (molecule.isAtomID(ID)) {
+            Atom carbon = molecule.getConnectedAtoms(molecule.getAtom(ID)).get(0);
+            Atom hydrogen = molecule.getAtom(ID);
+            Vector3f normal = Vector3f.subtract(hydrogen.position, carbon.position);
+            FunctionalGroup.createAndReplace(molecule, FunctionalGroup.TETRAHEDRAL, hydrogen, normal, 0);
+            camera.setFocus(molecule.getCenter());
+        }
     }
 
     private void render() {

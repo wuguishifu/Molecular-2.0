@@ -18,6 +18,18 @@ public class Molecule {
         this.atoms = atoms;
         this.bonds = bonds;
         this.bondMap = new BondMap();
+        for (Atom atom : atoms.values()) {
+            this.bondMap.add(atom.ID);
+        }
+        for (Bond bond : bonds.values()) {
+            this.addBond(atoms.get(bond.atomID1), atoms.get(bond.atomID2), bond.order);
+        }
+    }
+
+    public Molecule() {
+        this.atoms = new HashMap<>();
+        this.bonds = new HashMap<>();
+        this.bondMap = new BondMap();
     }
 
     public void toggleSelection(int ID) {
@@ -46,6 +58,14 @@ public class Molecule {
         return new Vector3f(x, y, z);
     }
 
+    public Atom getAtom(int ID) {
+        return atoms.getOrDefault(ID, null);
+    }
+
+    public Bond getBond(int ID) {
+        return bonds.getOrDefault(ID, null);
+    }
+
     public boolean isAtomID(int ID) {
         for (Integer key : atoms.keySet()) {
             if (key == ID) {
@@ -72,7 +92,12 @@ public class Molecule {
 
     public ArrayList<Atom> getConnectedAtoms(Atom a1) {
         int id = a1.ID;
-        return null;
+        ArrayList<Integer> ids = bondMap.getConnected(id);
+        ArrayList<Atom> atoms = new ArrayList<>();
+        for (int i : ids) {
+            atoms.add(this.atoms.get(i));
+        }
+        return atoms;
     }
 
     public HashMap<Integer, Atom> getAtoms() {
@@ -88,7 +113,18 @@ public class Molecule {
     }
 
     public void remove(int ID) {
-        this.atoms.remove(ID);
-        this.bonds.remove(ID);
+        if (isAtomID(ID)) {
+            this.removeAtom(ID);
+        } else {
+            this.bonds.remove(ID);
+        }
+    }
+
+    public void removeAtom(int id1) {
+        this.atoms.remove(id1);
+        ArrayList<Integer> connected = this.bondMap.removeAtom(id1);
+        for (int id2 : connected) {
+            this.bondMap.removeBond(id1, id2);
+        }
     }
 }

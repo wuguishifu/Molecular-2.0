@@ -2,7 +2,6 @@ package com.bramerlabs.molecular.molecule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class BondMap {
@@ -86,14 +85,22 @@ public class BondMap {
         connections.get(id2).add(id1);
     }
 
-    public void getConnected(int id) {
-        connections.get(id);
+    public ArrayList<Integer> getConnected(int id) {
+        return connections.get(id);
     }
 
     public int getOrder(int id1, int id2) {
         if (bondOrders.containsKey(new Key(id1, id2))) {
             return bondOrders.get(new Key(id1, id2));
         } else return bondOrders.getOrDefault(new Key(id2, id1), -1);
+    }
+
+    public ArrayList<Integer> removeAtom(int ID) {
+        return connections.remove(ID);
+    }
+
+    public int removeBond(int id1, int id2) {
+        return bondOrders.remove(new Key(id1, id2));
     }
 
     public void print() {
