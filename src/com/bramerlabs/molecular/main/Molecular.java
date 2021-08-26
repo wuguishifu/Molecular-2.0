@@ -11,9 +11,6 @@ import com.bramerlabs.molecular.engine3D.graphics.io.window.Window;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.WindowConstants;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector2f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
-import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
-import com.bramerlabs.molecular.engine3D.objects.Cylinder;
-import com.bramerlabs.molecular.engine3D.objects.IcoSphere;
 import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
@@ -44,9 +41,8 @@ public class Molecular implements Runnable {
     private boolean[] keysDown, keysDownLast;
     private boolean[] buttonsDown, buttonsDownLast;
 
-    FontType font;
-    String renderText = "fuck";
-    GUIText displayGUIText;
+    private String renderText = "debug";
+    private GUIText displayGUIText;
 
     public static void main(String[] args) {
         new Molecular().start();
@@ -68,7 +64,7 @@ public class Molecular implements Runnable {
         this.init();
         while (!window.shouldClose()) {
             this.update();
-            this.handleButtonPresses();
+            this.handInputs();
             this.render();
         }
         this.close();
@@ -81,7 +77,6 @@ public class Molecular implements Runnable {
                 new Vector3f(0, 1, 0), 0);
 
         camera.setFocus(molecule.getCenter());
-        molecule.bondMap.print();
     }
 
     private void init() {
@@ -99,18 +94,10 @@ public class Molecular implements Runnable {
         // initialize renderers
         renderer = new MoleculeRenderer(window, new Vector3f(0, 100, 0));
 
-        // initialize atom and bond data
-        Atom.sphere = new IcoSphere(new Vector3f(0), new Vector4f(0), 1.0f);
-        Atom.sphere.createMesh();
-
-        Bond.cylinder = new Cylinder(new Vector3f(0), new Vector3f(1, 0, 0),
-                new Vector4f(1, 1, 1, 1), 0.2f);
-        Bond.cylinder.createMesh();
-
         //initialize font renderer
         Loader loader = new Loader();
         TextMaster.init(loader);
-        font = new FontType(loader.loadTexture("arial"), new File("res/fonts/arial.fnt"));
+        FontType font = new FontType(loader.loadTexture("arial"), new File("res/fonts/arial.fnt"));
         displayGUIText = new GUIText(renderText, 1f, font, new Vector2f(0, 0.02f), 1f, true);
 
         // initialize mouse and key listeners
@@ -139,7 +126,7 @@ public class Molecular implements Runnable {
         System.arraycopy(input.getButtonsDown(), 0, buttonsDown, 0, input.getButtonsDown().length);
     }
 
-    private void handleButtonPresses() {
+    private void handInputs() {
         if (keyPressed(GLFW.GLFW_KEY_P)) {
             camera.printValues();
         }
@@ -187,16 +174,19 @@ public class Molecular implements Runnable {
     }
 
     private void render() {
+        // render molecules
         renderer.renderMolecule(molecule, camera, shader);
+
+        // render the text
+        TextMaster.render();
+
+
+        // happens last
         if (windowShouldSwapBuffers) {
             window.swapBuffers();
         } else {
             windowShouldSwapBuffers = true;
         }
-
-        // render the text
-        TextMaster.render();
-
     }
 
     private void close() {

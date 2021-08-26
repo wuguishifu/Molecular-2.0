@@ -1,6 +1,7 @@
 package com.bramerlabs.molecular.molecule.components.atom;
 
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
+import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
 import com.bramerlabs.molecular.engine3D.objects.IcoSphere;
 import com.bramerlabs.molecular.molecule.components.Component;
 
@@ -15,6 +16,11 @@ public class Atom extends Component {
     public Data data;
 
     public static IcoSphere sphere;
+
+    static {
+        sphere = new IcoSphere(new Vector3f(0, 0, 0), new Vector4f(0, 0, 0, 0), 1.0f);
+        sphere.createMesh();
+    }
 
     public Atom(Vector3f position, Data data) {
         super();

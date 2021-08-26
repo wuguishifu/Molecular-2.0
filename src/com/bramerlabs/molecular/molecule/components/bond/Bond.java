@@ -2,6 +2,7 @@ package com.bramerlabs.molecular.molecule.components.bond;
 
 import com.bramerlabs.molecular.engine3D.math.matrix.Matrix4f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
+import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
 import com.bramerlabs.molecular.engine3D.objects.Cylinder;
 import com.bramerlabs.molecular.molecule.components.Component;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
@@ -28,6 +29,12 @@ public class Bond extends Component {
 
     public Matrix4f[] modelMatrices;
     public Matrix4f[] highlightModelMatrices;
+
+    static {
+        cylinder = new Cylinder(new Vector3f(0, 0, 0), new Vector3f(1, 0, 0),
+                new Vector4f(0, 0, 0, 0), 0.2f);
+        cylinder.createMesh();
+    }
 
     public Bond(Atom a1, Atom a2, int order) {
         this.atomID1 = a1.ID;

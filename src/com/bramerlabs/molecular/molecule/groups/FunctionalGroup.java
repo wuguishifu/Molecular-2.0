@@ -70,12 +70,13 @@ public class FunctionalGroup {
                                         Vector3f connection, Vector3f[] bondPositions) {
         ArrayList<Atom> connectedAtoms = molecule.getConnectedAtoms(connected);
         if (connectedAtoms.size() > 1) {
-            System.err.println("Tried to replace a non-single bonded atom!");
+            System.err.println("Tried to replace a non-single bonded atom");
             return;
         }
 
         Vector3f normal = Vector3f.normalize(n);
         Atom connectionAtom = molecule.getConnectedAtoms(connected).get(0);
+        molecule.remove(connected.ID);
 
         Vector3f axis = Vector3f.normalize(Vector3f.cross(connection, normal));
         float angle = Vector3f.angleBetween(connection, normal);

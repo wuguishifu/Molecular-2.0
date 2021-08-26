@@ -26,7 +26,7 @@ public class Camera {
     private float horizontalDistance = 0, verticalDistance = 0; // distance from the looking position
 
     private static final float DEFAULT_VERTICAL_ANGLE = -30, DEFAULT_HORIZONTAL_ANGLE = 30; // default angles
-    private float verticalAngle = -90, horizontalAngle = 0; // used for looking straight forward
+    private float verticalAngle = DEFAULT_VERTICAL_ANGLE, horizontalAngle = DEFAULT_HORIZONTAL_ANGLE; // used for looking straight forward
 
     private boolean rotatingVertical = false, rotatingHorizontal = false; // used for constraint rotation
     private boolean translatingNorthSouth = false, translatingEastWest = false; // used for constraint translation
