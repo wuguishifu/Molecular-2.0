@@ -120,7 +120,7 @@ public class Molecular implements Runnable {
         buttonsDownLast = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
 
         // initialize molecule
-        initMolecule(); // aefaefeaf
+        initMolecule();
     }
 
     private void update() {
