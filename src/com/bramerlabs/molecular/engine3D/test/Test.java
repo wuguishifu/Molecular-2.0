@@ -72,7 +72,7 @@ public class Test implements Runnable {
         window.update();
         GL46.glClearColor(window.r, window.g, window.b, 1.0f);
         GL46.glClear(GL46.GL_COLOR_BUFFER_BIT | GL46.GL_DEPTH_BUFFER_BIT);
-        camera.updateArcball();
+        camera.update();
     }
 
     private void render() {

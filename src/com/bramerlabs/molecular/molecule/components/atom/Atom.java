@@ -50,9 +50,7 @@ public class Atom extends Component {
             return atomData.get(atomicNumber).VDWRadius;
         }
 
-        public static void init() {
-            parse();
-        }
+        static {parse();}
 
         private static void parse() {
             try (Scanner input = new Scanner(new File("res/atomic_data/atom_data.txt"))) {

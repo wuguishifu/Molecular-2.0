@@ -13,15 +13,15 @@ import com.bramerlabs.molecular.molecule.Molecule;
 import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
 import com.bramerlabs.molecular.molecule.components.bond.Bond;
-import com.bramerlabs.molecular.molecule.default_molecules.Cyanobenzene;
-import com.bramerlabs.molecular.molecule.groups.FunctionalGroup;
+import com.bramerlabs.molecular.molecule.groups.FunctionalGroupManager;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
+
+import static com.bramerlabs.molecular.molecule.groups.FunctionalGroupManager.Group.*;
 
 public class Molecular implements Runnable {
 
@@ -60,7 +60,6 @@ public class Molecular implements Runnable {
             this.update();
             this.handleButtonPresses();
             this.render();
-//            window.close();
         }
         this.close();
     }
@@ -68,9 +67,9 @@ public class Molecular implements Runnable {
     private void initMolecule() {
 
         molecule = new Molecule();
-        FunctionalGroup.createGroup(molecule, FunctionalGroup.TETRAHEDRAL, new Vector3f(0, 1, 0), 0);
+        FunctionalGroupManager.createGroup(molecule, TETRAHEDRAL,
+                new Vector3f(0, 1, 0), 0);
 
-//        molecule = new Cyanobenzene();
         camera.setFocus(molecule.getCenter());
         molecule.bondMap.print();
     }
@@ -91,8 +90,6 @@ public class Molecular implements Runnable {
         renderer = new MoleculeRenderer(window, new Vector3f(0, 100, 0));
 
         // initialize atom and bond data
-        Atom.DataCompiler.init();
-        Bond.DataCompiler.init();
         Atom.sphere = new IcoSphere(new Vector3f(0), new Vector4f(0), 1.0f);
         Atom.sphere.createMesh();
 
@@ -113,7 +110,7 @@ public class Molecular implements Runnable {
     private void update() {
         window.update();
         window.clear();
-        camera.updateArcball();
+        camera.update();
 
         // update buttons and keys
         System.arraycopy(keysDown, 0, keysDownLast, 0, keysDown.length);
@@ -164,7 +161,7 @@ public class Molecular implements Runnable {
             Atom carbon = molecule.getConnectedAtoms(molecule.getAtom(ID)).get(0);
             Atom hydrogen = molecule.getAtom(ID);
             Vector3f normal = Vector3f.subtract(hydrogen.position, carbon.position);
-            FunctionalGroup.createAndReplace(molecule, FunctionalGroup.TETRAHEDRAL, hydrogen, normal, 0);
+            FunctionalGroupManager.createAndReplace(molecule, BENT, hydrogen, normal, 0);
             camera.setFocus(molecule.getCenter());
         }
     }

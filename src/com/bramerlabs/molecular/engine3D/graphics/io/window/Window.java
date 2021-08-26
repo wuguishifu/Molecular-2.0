@@ -43,7 +43,7 @@ public class Window {
         this.width = defaultWidth;
         this.height = defaultHeight;
 
-        this.projection = Matrix4f.projection(70.0f, (float) width / (float) height, 0.1f, 100f);
+        this.projection = Matrix4f.projection(70.0f, (float) width / (float) height, 0.1f, 1000f);
         this.input = input;
     }
 

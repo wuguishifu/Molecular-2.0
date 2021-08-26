@@ -30,12 +30,14 @@ public class Camera {
 
     private boolean rotatingVertical = false, rotatingHorizontal = false; // used for constraint rotation
     private boolean translatingNorthSouth = false, translatingEastWest = false; // used for constraint translation
+    private boolean translating = false;
+    private boolean arcing = false;
 
     // the position of the mouse
-    private double oldMouseX = 0, oldMouseY = 0, newMouseX, newMouseY;
+    private float oldMouseX = 0, oldMouseY = 0, newMouseX, newMouseY;
 
     // the position of the scroll wheel
-    private double oldScrollX = 0, oldScrollY = 0, newScrollX = 0, newScrollY = 0;
+    private float oldScrollX = 0, oldScrollY = 0, newScrollX = 0, newScrollY = 0;
 
     /**
      * default constructor for specified position, rotation, and input object
@@ -77,55 +79,39 @@ public class Camera {
         this.focus = v;
     }
 
-    /**
-     * updates the camera based on keyboard and mouse input
-     */
     public void update() {
+
+//        translating = false;
+//        arcing = false;
+//        if (input.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+//            translating = true;
+//        } else {
+//            arcing = true;
+//        }
+        arcing = true;
 
         newMouseX = input.getMouseX();
         newMouseY = input.getMouseY();
 
-        float x = (float)Math.sin(Math.toRadians(rotation.getY())) * moveSpeed;
-        float z = (float)Math.cos(Math.toRadians(rotation.getY())) * moveSpeed;
-
-        // handle the WASD keys
-        if (input.isKeyDown(GLFW.GLFW_KEY_A)) position = Vector3f.add(position, new Vector3f(-z, 0,  x));
-        if (input.isKeyDown(GLFW.GLFW_KEY_D)) position = Vector3f.add(position, new Vector3f( z, 0, -x));
-        if (input.isKeyDown(GLFW.GLFW_KEY_W)) position = Vector3f.add(position, new Vector3f(-x, 0, -z));
-        if (input.isKeyDown(GLFW.GLFW_KEY_S)) position = Vector3f.add(position, new Vector3f( x, 0,  z));
-
-        // handle going up and down
-        if (input.isKeyDown(GLFW.GLFW_KEY_SPACE)) position = Vector3f.add(position, new Vector3f(0, moveSpeed, 0));
-        if (input.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) position = Vector3f.add(position, new Vector3f(0, -moveSpeed, 0));
-
-        // handle mouse motion
-        float dx = (float) (newMouseX - oldMouseX);
-        float dy = (float) (newMouseY - oldMouseY);
+        float dmx = newMouseX - oldMouseX;
+        float dmy = newMouseY - oldMouseY;
 
         oldMouseX = newMouseX;
         oldMouseY = newMouseY;
 
-        // rotate according to the mouse motion
-        rotation = Vector3f.add(rotation, new Vector3f(-dy * mouseSensitivity, -dx * mouseSensitivity, 0)); //dx, dy must be flipped and inverted
+//        updateTranslation(dmx, dmy);
+        updateArcball(dmx, dmy);
     }
 
     /**
      * update method for an arcball camera
      */
-    public void updateArcball() {
+    public void updateArcball(float dmx, float dmy) {
         if (input.isKeyDown(GLFW.GLFW_KEY_ENTER)) {
             this.verticalAngle = DEFAULT_VERTICAL_ANGLE;
             this.horizontalAngle = DEFAULT_HORIZONTAL_ANGLE;
             this.distance = DEFAULT_DISTANCE;
         }
-
-        // get the new x and y components of the mouse position
-        newMouseX = input.getMouseX();
-        newMouseY = input.getMouseY();
-
-        // handle mouse motion
-        float dmx = (float) (newMouseX - oldMouseX);
-        float dmy = (float) (newMouseY - oldMouseY);
 
         // get the new x and y components of the scroll wheel
         //newScrollX = input.getScrollX();
@@ -133,15 +119,13 @@ public class Camera {
 
         // handle scroll motion
         //float dsx = (float) (newScrollX - oldScrollX);
-        float dsy = (float) (newScrollY - oldScrollY);
+        float dsy = newScrollY - oldScrollY;
 
-        oldMouseX = newMouseX;
-        oldMouseY = newMouseY;
         //oldScrollX = newScrollX;
         oldScrollY = newScrollY;
 
         // change the rotation using the mouse
-        if (input.isMouseButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
+        if (input.isMouseButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT) && arcing) {
             verticalAngle -= dmy * mouseSensitivity;
             horizontalAngle += dmx * mouseSensitivity;
         }
@@ -165,6 +149,38 @@ public class Camera {
         this.rotation.set(verticalAngle, -horizontalAngle, 0);
     }
 
+    public void updateTranslation(float dmx, float dmy) {
+        Vector3f direction = Vector3f.normalize(Vector3f.subtract(focus, position));
+        Vector3f normal = new Vector3f(0, 1, 0);
+        if (Vector3f.cross(normal, direction).equals(Vector3f.zero)) {
+            normal = new Vector3f(0, 0, 1);
+        }
+
+        Vector3f zxNormal = Vector3f.normalize(Vector3f.cross(normal, direction));
+        Vector3f yNormal = Vector3f.normalize(Vector3f.cross(direction, zxNormal));
+
+        Vector3f zxMovement = Vector3f.normalize(zxNormal, moveSpeed * mouseSensitivity * Math.abs(dmx));
+        Vector3f yMovement = Vector3f.normalize(yNormal, moveSpeed * mouseSensitivity * Math.abs(dmy));
+
+        if (input.isMouseButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT) && translating) {
+            if (dmx < 0) {
+                this.focus = Vector3f.add(this.focus, zxMovement);
+                this.position = Vector3f.add(this.position, zxMovement);
+            } else {
+                this.focus = Vector3f.subtract(this.focus, zxMovement);
+                this.position = Vector3f.subtract(this.position, zxMovement);
+            }
+            if (dmy > 0) {
+                this.focus = Vector3f.add(this.focus, yMovement);
+                this.position = Vector3f.add(this.position, yMovement);
+            } else {
+                this.focus = Vector3f.subtract(this.focus, yMovement);
+                this.position = Vector3f.subtract(this.position, yMovement);
+            }
+        }
+
+    }
+
     /**
      * translates the point at which the camera is looking at
      */
@@ -174,8 +190,8 @@ public class Camera {
         newMouseY = input.getMouseY();
 
         // handle mouse motion
-        float dmx = (float) (newMouseX - oldMouseX);
-        float dmy = (float) (newMouseY - oldMouseY);
+        float dmx = newMouseX - oldMouseX;
+        float dmy = newMouseY - oldMouseY;
 
         // handle constraint motion
         if (!translatingNorthSouth && !translatingEastWest) {
@@ -202,7 +218,7 @@ public class Camera {
         Vector3f lookingDirection = Vector3f.normalize(Vector3f.subtract(focus, position));
         // create a non-parallel vector in the plane of the horizontal angle
         Vector3f tempV1 = Vector3f.add(lookingDirection, new Vector3f(0, 1.f, 0)); // will never be parallel
-        if (tempV1.equals(new Vector3f(0), 0.0001f)) {
+        if (tempV1.equals(new Vector3f(0))) {
             tempV1 = Vector3f.add(lookingDirection, new Vector3f(0, 2.f, 0));
         }
 

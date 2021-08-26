@@ -117,9 +117,7 @@ public class Bond extends Component {
 
         public static HashMap<Integer, float[]> covalentRadii = new HashMap<>();
 
-        public static void init() {
-            parse();
-        }
+        static {parse();}
 
         public static float getLength(int atomicNumber1, int atomicNumber2, int order) {
             if (order >= 4 || order < 1) {
