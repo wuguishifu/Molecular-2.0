@@ -32,14 +32,41 @@ public class Molecule {
         this.bondMap = new BondMap();
     }
 
-    public void toggleSelection(int ID) {
+    public boolean toggleSelection(int ID) {
         Atom atom = atoms.get(ID);
         if (atom != null) {
             atom.toggleSelected();
+            return true;
         }
         Bond bond = bonds.get(ID);
         if (bond != null) {
             bond.toggleSelected();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean singleSelection(int ID) {
+        unselect();
+        Atom atom = atoms.get(ID);
+        if (atom != null) {
+            atom.selected = true;
+            return true;
+        }
+        Bond bond = bonds.get(ID);
+        if (bond != null) {
+            bond.selected = true;
+            return true;
+        }
+        return false;
+    }
+
+    public void unselect() {
+        for (Atom atom : atoms.values()) {
+            atom.selected = false;
+        }
+        for (Bond bond : bonds.values()) {
+            bond.selected = false;
         }
     }
 

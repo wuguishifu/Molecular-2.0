@@ -16,6 +16,7 @@ import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
 import com.bramerlabs.molecular.molecule.components.bond.Bond;
 import com.bramerlabs.molecular.molecule.groups.FunctionalGroupManager;
+import com.bramerlabs.molecular.molecule.util.MoleculeParser;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -41,7 +42,7 @@ public class Molecular implements Runnable {
     private boolean[] keysDown, keysDownLast;
     private boolean[] buttonsDown, buttonsDownLast;
 
-    private String renderText = "debug";
+    private String renderText = "";
     private GUIText displayGUIText;
 
     public static void main(String[] args) {
@@ -133,7 +134,7 @@ public class Molecular implements Runnable {
         if (keyPressed(GLFW.GLFW_KEY_ENTER)) {
             camera.setIdealPosition();
         }
-        if (buttonPressed(GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
+        if (buttonReleased(GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
             windowShouldSwapBuffers = false;
             getSelectedAtom();
         }
@@ -162,7 +163,14 @@ public class Molecular implements Runnable {
         }
 
         int ID = MoleculeRenderer.getPickingID(color);
-//        molecule.toggleSelection(ID);
+//        if (!molecule.singleSelection(ID)) {
+//            molecule.unselect();
+//            renderText = "";
+//        } else if (molecule.isAtomID(ID)) {
+//            Atom atom = molecule.getAtom(ID);
+//            renderText = Atom.DataCompiler.getName(atom.data.atomicNumber) + " at " + atom.position + " with charge " +
+//                    atom.data.charge;
+//        }
 
         if (molecule.isAtomID(ID)) {
             Atom carbon = molecule.getConnectedAtoms(molecule.getAtom(ID)).get(0);
@@ -170,6 +178,10 @@ public class Molecular implements Runnable {
             Vector3f normal = Vector3f.subtract(hydrogen.position, carbon.position);
             FunctionalGroupManager.createAndReplace(molecule, BENT, hydrogen, normal, 0);
             camera.setFocus(molecule.getCenter());
+
+            int length = MoleculeParser.longestChain(molecule);
+            System.out.println(length);
+
         }
     }
 

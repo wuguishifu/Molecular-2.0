@@ -693,9 +693,12 @@ public class Vector3f {
     @Override
     public String toString() {
         DecimalFormat df2 = new DecimalFormat("#,###,###,#00.00");
-        String xS = String.format("%6s", df2.format(this.x));
-        String yS = String.format("%6s", df2.format(this.y));
-        String zS = String.format("%6s", df2.format(this.z));
+//        String xS = String.format("%6s", df2.format(this.x));
+//        String yS = String.format("%6s", df2.format(this.y));
+//        String zS = String.format("%6s", df2.format(this.z));
+        String xS = df2.format(this.x);
+        String yS = df2.format(this.y);
+        String zS = df2.format(this.z);
         return "(" + xS + ", " + yS + ", " + zS + ")";
     }
 }
