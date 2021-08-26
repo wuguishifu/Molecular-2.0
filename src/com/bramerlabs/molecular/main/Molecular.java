@@ -2,9 +2,14 @@ package com.bramerlabs.molecular.main;
 
 import com.bramerlabs.molecular.engine3D.graphics.Camera;
 import com.bramerlabs.molecular.engine3D.graphics.Shader;
+import com.bramerlabs.molecular.engine3D.graphics.io.text.font_mesh_creator.FontType;
+import com.bramerlabs.molecular.engine3D.graphics.io.text.font_mesh_creator.GUIText;
+import com.bramerlabs.molecular.engine3D.graphics.io.text.font_rendering.Loader;
+import com.bramerlabs.molecular.engine3D.graphics.io.text.font_rendering.TextMaster;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.Input;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.Window;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.WindowConstants;
+import com.bramerlabs.molecular.engine3D.math.vector.Vector2f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector4f;
 import com.bramerlabs.molecular.engine3D.objects.Cylinder;
@@ -19,6 +24,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
+import java.io.File;
 import java.nio.ByteBuffer;
 
 import static com.bramerlabs.molecular.molecule.groups.FunctionalGroupManager.Group.*;
@@ -37,6 +43,10 @@ public class Molecular implements Runnable {
 
     private boolean[] keysDown, keysDownLast;
     private boolean[] buttonsDown, buttonsDownLast;
+
+    FontType font;
+    String renderText = "fuck";
+    GUIText displayGUIText;
 
     public static void main(String[] args) {
         new Molecular().start();
@@ -97,6 +107,12 @@ public class Molecular implements Runnable {
                 new Vector4f(1, 1, 1, 1), 0.2f);
         Bond.cylinder.createMesh();
 
+        //initialize font renderer
+        Loader loader = new Loader();
+        TextMaster.init(loader);
+        font = new FontType(loader.loadTexture("arial"), new File("res/fonts/arial.fnt"));
+        displayGUIText = new GUIText(renderText, 1f, font, new Vector2f(0, 0.02f), 1f, true);
+
         // initialize mouse and key listeners
         keysDown = new boolean[GLFW.GLFW_KEY_LAST];
         keysDownLast = new boolean[GLFW.GLFW_KEY_LAST];
@@ -111,6 +127,10 @@ public class Molecular implements Runnable {
         window.update();
         window.clear();
         camera.update();
+
+        // set display text
+        displayGUIText.setTextString(renderText);
+        displayGUIText.loadText();
 
         // update buttons and keys
         System.arraycopy(keysDown, 0, keysDownLast, 0, keysDown.length);
@@ -173,6 +193,10 @@ public class Molecular implements Runnable {
         } else {
             windowShouldSwapBuffers = true;
         }
+
+        // render the text
+        TextMaster.render();
+
     }
 
     private void close() {
@@ -180,6 +204,7 @@ public class Molecular implements Runnable {
         shader.destroy();
         Atom.sphere.destroy();
         Bond.cylinder.destroy();
+        TextMaster.cleanUp();
     }
 
     public boolean keyPressed(int key) {

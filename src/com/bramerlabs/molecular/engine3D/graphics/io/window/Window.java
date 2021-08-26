@@ -7,6 +7,8 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL46;
+import org.lwjglx.LWJGLException;
+import org.lwjglx.opengl.Display;
 
 import java.awt.*;
 
