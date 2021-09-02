@@ -22,8 +22,11 @@ data is stored in a bi-dimensional matrix M(i, j), where
 
 */
 
+import com.bramerlabs.molecular.molecule.Molecule;
+import org.openscience.cdk.iupac.parser.MoleculeBuilder;
+
 public class MARK {
 
-    
+
 
 }
