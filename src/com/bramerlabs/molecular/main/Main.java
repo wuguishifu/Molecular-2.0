@@ -66,8 +66,6 @@ public class Main implements Runnable {
         buttonsDown = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
         buttonsDownLast = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
 
-
-
     }
 
     private void update() {

@@ -71,6 +71,10 @@ public class Window {
         GLFW.glfwSetWindowPos(windowHandle, vidMode.width()/4, vidMode.height()/4);
         input.setWindowX(vidMode.width()/4);
         input.setWindowY(vidMode.height()/4);
+//        GLFW.glfwSetWindowSize(windowHandle, width, height);
+//        GLFW.glfwSetWindowPos(windowHandle, 0, 0);
+//        input.setWindowX(0);
+//        input.setWindowY(0);
 
         GLFW.glfwMakeContextCurrent(windowHandle);
         GL.createCapabilities();
