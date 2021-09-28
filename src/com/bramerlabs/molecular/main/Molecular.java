@@ -17,8 +17,6 @@ import com.bramerlabs.molecular.molecule.components.atom.Atom;
 import com.bramerlabs.molecular.molecule.components.bond.Bond;
 import com.bramerlabs.molecular.molecule.groups.FunctionalGroupManager;
 import com.bramerlabs.molecular.molecule.util.MoleculeParser;
-import com.bramerlabs.molecular.ui.Button;
-import com.bramerlabs.molecular.ui.Gui;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -43,8 +41,6 @@ public class Molecular implements Runnable {
 
     private boolean[] keysDown, keysDownLast;
     private boolean[] buttonsDown, buttonsDownLast;
-
-    private Gui gui;
 
     private String renderText = "";
     private GUIText displayGUIText;
@@ -84,26 +80,6 @@ public class Molecular implements Runnable {
     }
 
     private void initGui() {
-        Button[] buttons = new Button[]{
-                new Button(0, 0, 50, 50)
-        };
-        buttons[0].setOnClickListener(buttonCode -> {
-            switch (buttonCode) {
-                case GLFW.GLFW_MOUSE_BUTTON_1:
-                    System.out.println("primary click");
-                    return true;
-                case GLFW.GLFW_MOUSE_BUTTON_RIGHT:
-                    System.out.println("secondary click");
-                    return true;
-                case GLFW.GLFW_MOUSE_BUTTON_MIDDLE:
-                    System.out.println("tertiary click");
-                    return true;
-                default:
-                    System.out.println("non click event");
-                    return false;
-            }
-        });
-        gui = new Gui(buttons);
     }
 
     private void init() {
@@ -148,15 +124,6 @@ public class Molecular implements Runnable {
         // set display text
         displayGUIText.setTextString(renderText);
         displayGUIText.loadText();
-
-        // update the gui
-        if (buttonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-            gui.update(input.getMouseX(), input.getMouseY(), GLFW.GLFW_MOUSE_BUTTON_LEFT);
-        } else if (buttonPressed(GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
-            gui.update(input.getMouseX(), input.getMouseY(), GLFW.GLFW_MOUSE_BUTTON_RIGHT);
-        } else if (buttonPressed(GLFW.GLFW_MOUSE_BUTTON_MIDDLE)) {
-            gui.update(input.getMouseX(), input.getMouseY(), GLFW.GLFW_MOUSE_BUTTON_MIDDLE);
-        }
 
         // update buttons and keys
         System.arraycopy(keysDown, 0, keysDownLast, 0, keysDown.length);
