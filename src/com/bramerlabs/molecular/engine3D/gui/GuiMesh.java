@@ -12,10 +12,6 @@ public class GuiMesh extends Mesh {
         super(vertices, indices);
     }
 
-    public boolean inBounds(float mouseX, float mouseY) {
-        return false;
-    }
-
     @Override
     public void create() {
         vao = GL46.glGenVertexArrays();

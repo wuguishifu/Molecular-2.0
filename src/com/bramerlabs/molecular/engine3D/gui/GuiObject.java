@@ -3,16 +3,18 @@ package com.bramerlabs.molecular.engine3D.gui;
 public class GuiObject {
 
     public GuiMesh mesh;
+    public GuiSelectionBox selectionBox;
 
     private GuiObject.OnClickListener onClickListener;
 
-    public GuiObject(GuiMesh mesh) {
+    public GuiObject(GuiMesh mesh, GuiSelectionBox selectionBox) {
         this.mesh = mesh;
+        this.selectionBox = selectionBox;
         this.onClickListener = buttonCode -> false;
     }
 
     public boolean performClick(int buttonCode) {
-        return onClickListener.onClick(buttonCode);
+        return this.onClickListener.onClick(buttonCode);
     }
 
     public void setOnClickListener(GuiObject.OnClickListener onClickListener) {
@@ -26,7 +28,7 @@ public class GuiObject {
     }
 
     public boolean inBounds(float mouseX, float mouseY) {
-        return mesh.inBounds(mouseX, mouseY);
+        return this.selectionBox.inBounds(mouseX, mouseY);
     }
 
     public interface OnClickListener {
