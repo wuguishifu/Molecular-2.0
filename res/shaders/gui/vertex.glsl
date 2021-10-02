@@ -10,6 +10,6 @@ uniform mat4 vProjection;
 out vec2 passTextureCoord;
 
 void main() {
-    gl_Position = vec4(position, 1.0);
+    gl_Position = vProjection * vView * vModel * vec4(position, 1.0);
     passTextureCoord = textureCoord;
 }
