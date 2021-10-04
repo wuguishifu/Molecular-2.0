@@ -8,8 +8,11 @@ import java.nio.FloatBuffer;
 
 public class GuiMesh extends Mesh {
 
-    public GuiMesh(GuiVertex[] vertices, int[] indices) {
+    private GuiMaterial material;
+
+    public GuiMesh(GuiVertex[] vertices, int[] indices, GuiMaterial material) {
         super(vertices, indices);
+        this.material = material;
     }
 
     @Override
@@ -31,5 +34,9 @@ public class GuiMesh extends Mesh {
         }
         textureBuffer.put(textureData).flip();
         tbo = storeData(textureBuffer, TEXTURE_COORD, 2);
+    }
+
+    public GuiMaterial getMaterial() {
+        return this.material;
     }
 }
