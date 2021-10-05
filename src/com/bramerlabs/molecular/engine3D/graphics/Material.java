@@ -28,9 +28,10 @@ public class Material {
 
     /**
      * default constructor
-     * @param pathToBaseMap - the base color map
+     *
+     * @param pathToBaseMap     - the base color map
      * @param pathToSpecularMap - the specular map
-     * @param pathToNormalMap - the normal map
+     * @param pathToNormalMap   - the normal map
      */
     public Material(String pathToBaseMap, String pathToSpecularMap, String pathToNormalMap) {
         this.pathToBaseMap = pathToBaseMap;
@@ -74,6 +75,7 @@ public class Material {
 
     /**
      * getter method
+     *
      * @return - the width of the texture
      */
     public float getWidth() {
@@ -82,6 +84,7 @@ public class Material {
 
     /**
      * getter method
+     *
      * @return - the height of the texture
      */
     public float getHeight() {
@@ -90,6 +93,7 @@ public class Material {
 
     /**
      * getter method
+     *
      * @return - the id of the base texture
      */
     public int getTextureID() {
@@ -98,6 +102,7 @@ public class Material {
 
     /**
      * getter method
+     *
      * @return - the id of the specular map
      */
     public int getSpecularID() {
@@ -106,6 +111,7 @@ public class Material {
 
     /**
      * getter method
+     *
      * @return - the id of the normal map
      */
     public int getNormalID() {

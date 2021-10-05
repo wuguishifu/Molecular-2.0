@@ -17,7 +17,8 @@ public class ButtonMesh extends GuiMesh {
                 new int[]{
                         0, 1, 2,
                         0, 2, 3
-                }
+                },
+                null
         );
     }
 
