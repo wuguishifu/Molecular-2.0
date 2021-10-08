@@ -29,6 +29,18 @@ public class GuiObject {
         this.onClickListener = buttonCode -> false;
     }
 
+    public GuiObject(GuiMesh mesh, GuiSelectionBox selectionBox) {
+        this.mesh = mesh;
+        this.selectionBox = selectionBox;
+        this.position = new Vector3f(1, 1, 1);
+        this.rotation = new Vector3f(1, 1, 1);
+        this.scale = new Vector3f(1, 1, 1);
+
+        this.model = Matrix4f.transform(position, rotation, scale);
+
+        this.onClickListener = buttonCode -> false;
+    }
+
     public boolean performClick(int buttonCode) {
         return this.onClickListener.onClick(buttonCode);
     }

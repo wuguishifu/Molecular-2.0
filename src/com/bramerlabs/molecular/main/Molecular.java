@@ -9,6 +9,10 @@ import com.bramerlabs.molecular.engine3D.graphics.io.text.font_rendering.TextMas
 import com.bramerlabs.molecular.engine3D.graphics.io.window.Input;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.Window;
 import com.bramerlabs.molecular.engine3D.graphics.io.window.WindowConstants;
+import com.bramerlabs.molecular.engine3D.gui.Gui;
+import com.bramerlabs.molecular.engine3D.gui.GuiObject;
+import com.bramerlabs.molecular.engine3D.gui.GuiSelectionBox;
+import com.bramerlabs.molecular.engine3D.gui.def.ButtonMesh;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector2f;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector3f;
 import com.bramerlabs.molecular.molecule.Molecule;
@@ -24,6 +28,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.Color;
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 import static com.bramerlabs.molecular.molecule.groups.FunctionalGroupManager.Group.*;
 
@@ -44,6 +49,8 @@ public class Molecular implements Runnable {
 
     private String renderText = "";
     private GUIText displayGUIText;
+
+    private Gui gui;
 
     public static void main(String[] args) {
         new Molecular().start();
@@ -80,6 +87,14 @@ public class Molecular implements Runnable {
     }
 
     private void initGui() {
+        ArrayList<GuiObject> guiObjects = new ArrayList<>();
+        guiObjects.add(new GuiObject(new ButtonMesh(new Vector2f(0, 0), new Vector2f(0.5f, 0.5f)),
+                new GuiSelectionBox(new Vector2f(0, 0), new Vector2f(0.5f, 0.5f))));
+        guiObjects.get(0).setOnClickListener(buttonCode -> {
+            System.out.println("clicked");
+            return false;
+        });
+        gui = new Gui(guiObjects);
     }
 
     private void init() {
@@ -142,6 +157,9 @@ public class Molecular implements Runnable {
         if (buttonReleased(GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
             windowShouldSwapBuffers = false;
             getSelectedAtom();
+        }
+        if (buttonPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
+            gui.update(input.getMouseX(), input.getMouseY(), GLFW.GLFW_MOUSE_BUTTON_LEFT);
         }
     }
 
