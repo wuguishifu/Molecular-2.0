@@ -1,5 +1,7 @@
 package com.bramerlabs.molecular.engine3D.graphics.graph_util;
 
+import com.bramerlabs.molecular.engine3D.math.vector.Vector2f;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.text.DecimalFormat;
@@ -7,47 +9,69 @@ import java.util.ArrayList;
 
 public class GraphRenderer {
 
-    private final ArrayList<GraphComponent> components;
+    private final ArrayList<Point> points;
     private final GraphDisplay gd;
     private final Dimension displaySize;
     private final ArrayList<Axis> axes;
+    private float graphWidth = 0, graphHeight = 0;
+    private int graphPaddingX = 0, graphPaddingY = 0;
+    private float x1 = 0, y1 = 0, x2 = 0, y2 = 0;
 
     public GraphRenderer(GraphDisplay gd) {
-        this.components = new ArrayList<>();
+        this.points = new ArrayList<>();
         this.gd = gd;
         displaySize = gd.panel.getPreferredSize();
         axes = new ArrayList<>();
     }
 
     public void paint(Graphics g) {
-        for (GraphComponent component : components) {
-            component.paint(g);
+        for (Point point : points) {
+            paintComponent(g, point.value);
         }
         for (Axis axis : axes) {
             axis.paint(g);
         }
     }
 
-    public ArrayList<GraphComponent> getComponents() {
-        return this.components;
+    public void paintComponent(Graphics g, Vector2f v) {
+        float px = v.x - x1;
+        float py = v.y - y1;
+        float diffX = px/graphWidth;
+        float diffY = py/graphHeight;
+        int x = (int) (diffX * (displaySize.width - 2 * graphPaddingX));
+        int y = (int) (diffY * (displaySize.height - 2 * graphPaddingY));
+        int r = 3;
+        g.drawOval(x + graphPaddingX - r, y + graphPaddingY - r, 2 * r, 2 * r);
     }
 
-    public void addComponent(GraphComponent g) {
-        this.components.add(g);
+    public ArrayList<Point> getComponents() {
+        return this.points;
     }
 
-    public void remove(GraphComponent g) {
-        this.components.remove(g);
+    public void addComponent(Point p) {
+        this.points.add(p);
+    }
+
+    public void addComponent(Vector2f v) {
+        this.points.add(new Point(v));
+    }
+
+    public void remove(Point p) {
+        this.points.remove(p);
     }
 
     public void addAxis(float v0, float v1, int intervals, String label, int orientation) {
         Font h = new Font("Helvetica", Font.PLAIN, 15);
         Font h1 = new Font("Helvetica", Font.PLAIN, 12);
-        DecimalFormat df2 = new DecimalFormat("#,###,###,#00.00");
         axes.add(g -> {
             int paddingX = displaySize.width/10;
             int paddingY = displaySize.height/10;
+            graphPaddingX = paddingX;
+            graphPaddingY = paddingY;
             if (orientation == X) {
+                graphWidth = v1 - v0;
+                x1 = v0;
+                x2 = v1;
                 g.drawLine(paddingX, displaySize.height - paddingY,
                         displaySize.width - paddingX, displaySize.height - paddingY);
                 drawCenteredString(g, label,
@@ -67,6 +91,9 @@ public class GraphRenderer {
                     g.drawString(String.format("%6.3e", value), x - paddingX/6, yPos);
                 }
             } else if (orientation == Y) {
+                graphHeight = v1 - v0;
+                y1 = v0;
+                y2 = v1;
                 g.drawLine(paddingX, paddingY, paddingX, displaySize.height - paddingY);
                 drawCenteredString(g, label,
                         new Rectangle(0, 0, paddingX/2, displaySize.height), h, 90);
@@ -113,6 +140,15 @@ public class GraphRenderer {
 
     private interface Axis {
         void paint(Graphics g);
+    }
+
+    public static class Point {
+
+        public Vector2f value;
+
+        public Point(Vector2f value) {
+            this.value = value;
+        }
     }
 
 }

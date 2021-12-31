@@ -1,5 +1,7 @@
 package com.bramerlabs.molecular.engine3D.graphics.graph_util;
 
+import com.bramerlabs.molecular.engine3D.math.vector.Vector2f;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,8 +45,11 @@ public class GraphDisplay {
         GraphDisplay gd = new GraphDisplay(new Dimension(800, 600));
         GraphRenderer gr = new GraphRenderer(gd);
         gd.addRenderer(gr);
-        gr.addAxis(0, 0.001f, 5, "velocity [cm/s]", GraphRenderer.X);
-        gr.addAxis(0, 0.0005f, 5, "pressure drop [Pa]", GraphRenderer.Y);
+        gr.addAxis(0, 10, 5, "velocity [cm/s]", GraphRenderer.X);
+        gr.addAxis(-5, 5, 5, "pressure drop [Pa]", GraphRenderer.Y);
+        for (int i = 0; i < 100; i++) {
+            gr.addComponent(new Vector2f(i/10.f, (float) (3 * Math.sin(i/10.f))));
+        }
         gd.repaint();
     }
 
