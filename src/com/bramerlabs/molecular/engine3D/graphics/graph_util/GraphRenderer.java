@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class GraphRenderer {
 
     private final ArrayList<Point> points;
-    private final GraphDisplay gd;
     private final Dimension displaySize;
     private final ArrayList<Axis> axes;
     private float graphWidth = 0, graphHeight = 0;
@@ -19,7 +18,6 @@ public class GraphRenderer {
 
     public GraphRenderer(GraphDisplay gd) {
         this.points = new ArrayList<>();
-        this.gd = gd;
         displaySize = gd.panel.getPreferredSize();
         axes = new ArrayList<>();
     }
@@ -27,6 +25,9 @@ public class GraphRenderer {
     public void paint(Graphics g) {
         for (Point point : points) {
             paintComponent(g, point.value);
+        }
+        for (int i = 0; i < points.size() - 1; i++) {
+            paintComponent(g, points.get(i).value, points.get(i + 1).value);
         }
         for (Axis axis : axes) {
             axis.paint(g);
@@ -40,8 +41,27 @@ public class GraphRenderer {
         float diffY = py/graphHeight;
         int x = (int) (diffX * (displaySize.width - 2 * graphPaddingX));
         int y = (int) (diffY * (displaySize.height - 2 * graphPaddingY));
-        int r = 3;
+        int r = 5;
         g.drawOval(x + graphPaddingX - r, y + graphPaddingY - r, 2 * r, 2 * r);
+    }
+
+    public void paintComponent(Graphics g, Vector2f v1, Vector2f v2) {
+        float px1 = v1.x - x1;
+        float py1 = v1.y - y1;
+        float px2 = v2.x - x1;
+        float py2 = v2.y - y1;
+        float diffX1 = px1/graphWidth;
+        float diffY1 = py1/graphHeight;
+        float diffX2 = px2/graphWidth;
+        float diffY2 = py2/graphHeight;
+        int x1 = (int) (diffX1 * (displaySize.width - 2 * graphPaddingX));
+        int y1 = (int) (diffY1 * (displaySize.height - 2 * graphPaddingY));
+        int x2 = (int) (diffX2 * (displaySize.width - 2 * graphPaddingX));
+        int y2 = (int) (diffY2 * (displaySize.height - 2 * graphPaddingY));
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setStroke(new BasicStroke(2));
+        g2d.drawLine(x1 + graphPaddingX, y1 + graphPaddingY, x2 + graphPaddingX, y2 + graphPaddingY);
+        g2d.dispose();
     }
 
     public ArrayList<Point> getComponents() {

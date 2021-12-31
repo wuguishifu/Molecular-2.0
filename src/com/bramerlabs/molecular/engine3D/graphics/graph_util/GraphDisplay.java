@@ -48,9 +48,13 @@ public class GraphDisplay {
         gr.addAxis(0, 10, 5, "velocity [cm/s]", GraphRenderer.X);
         gr.addAxis(-5, 5, 5, "pressure drop [Pa]", GraphRenderer.Y);
         for (int i = 0; i < 100; i++) {
-            gr.addComponent(new Vector2f(i/10.f, (float) (3 * Math.sin(i/10.f))));
+            gr.addComponent(new Vector2f(i/10.f, 3 * equation(i/10f)));
         }
         gd.repaint();
+    }
+
+    public static float equation(float x) {
+        return (float) (Math.sin(x) * Math.cos(2 * x));
     }
 
 }
