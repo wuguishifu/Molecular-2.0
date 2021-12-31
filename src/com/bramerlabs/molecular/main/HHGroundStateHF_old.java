@@ -2,7 +2,6 @@ package com.bramerlabs.molecular.main;
 
 import com.bramerlabs.molecular.engine3D.math.comparators.ArrayIndexComparator;
 import com.bramerlabs.molecular.engine3D.math.functions.ErrorFunction;
-import com.bramerlabs.molecular.engine3D.math.linear.Linear;
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -10,117 +9,106 @@ import org.apache.commons.math3.linear.RealMatrix;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.bramerlabs.molecular.engine3D.math.functions.ErrorFunction.erf;
-import static java.lang.Math.*;
-
-public class HHGroundStateHF {
+public class HHGroundStateHF_old {
 
     public static void main(String[] args) {
-
-        int asize, count;
-        double Z = 1, Elast, Dii, Vi, as, ap, rat, rp, F0, as1, ap1, as2, ap2, rq, r, NNr, nor, J;
-        double[] a, a1, ra, rplot, Eval;
+        double Z = 1, Elast, Dii;
+        double[] alpha1;
+        double[] alpha;
+        double[] ra;
+        double[] rplot;
+        double[] EVal;
+        double Vi;
         double[][] T = new double[8][8], S = new double[8][8], A = new double[8][8], C, Ci, P, S_D, F = new double[8][8];
         double[][][][] G = new double[8][8][8][8];
-        RealMatrix V_re, D_re, Vecp, Vec, Val;
-        RealMatrix V_im, D_im;
-
+        int asize, count;
+        double as, ap, rat, rp, F0, as1, ap1, as2, ap2, rq;
+        RealMatrix V, D, Vecp, Vec, Val;
+        double r, NNr, nor, J;
         ArrayList<Double> Erec = new ArrayList<>();
 
-        double pi = Math.PI, e = Math.E;
+        for (int y = 1; y <= 1; y++) {
+            r = 0.45f + 0.05f * y; // distance between nuclei in a.u. (units of a0)
+            NNr = 1/r;
 
-        for (int y = 1; y <= 41; y++) {
-            r = 0.45 + 0.05 * y; // distance between nuclei in A.U. (bohr radius)
-            NNr = 1 / r;
+            // alphas for the Gaussian basis functions
+            alpha1 = new double[]{13.00773, 1.962079, 0.444529, 0.1219492};
+            alpha = new double[]{13.00773, 1.962079, 0.444529, 0.1219492, 13.00773, 1.962079, 0.444529, 0.1219492};
+            asize = alpha.length;
 
-            // alphas for the gaussian basis functions for each H atom
-            a1 = new double[]{13.00773, 1.962079, 0.444529, 0.1219492};
-            a = new double[8];
-            for (int i = 0; i < 4; i++) {
-                a[i] = a[i + 4] = a1[i];
-            }
-            asize = a.length;
-
-            // one H nucleus origin, one at r
+            // one H nucleus at origin, other at r
             ra = new double[]{0, 0, 0, 0, r, r, r, r};
 
-            // run over all basis functions to calculate the overlap, kinetic energy, and coulomb matrices
+            // run over all basis functions
             for (int i = 0; i < 8; i++) {
+                // do not run over all basis functions to exploit symmetry
                 for (int j = 0; j <= i; j++) {
-                    as = a[i] + a[j];
-                    ap = a[i] * a[j];
-                    rat = ap / as;
+                    as = alpha[i] + alpha[j];
+                    ap = alpha[i] * alpha[j];
+                    rat = ap/as;
 
-                    // location of resulting gaussian
-                    double a2 = -rat * (ra[i] - ra[j]) * (ra[i] - ra[j]);
-                    rp = (a[i] * ra[i] + a[j] * ra[j]) / as;
-                    S[i][j] = pow(pi / as, 1.5) * exp(a2);
-                    S[j][i] = S[i][j]; // symmetry
-                    T[i][j] = 0.5 * rat * (6 - 4 * rat * (ra[i] - ra[j]) * (ra[i] - ra[j])) * S[i][j];
-                    T[j][i] = T[i][j]; // symmetry
-
-                    double v = sqrt(as * (rp - r) * (rp - r));
+                    // location of the Gaussian resulting from product of the 2 basis functions
+                    rp = (alpha[i] * ra[i] + alpha[j] * ra[j]) / as;
+                    double a = -rat * (ra[i] - ra[j]) * (ra[i] - ra[j]);
+                    S[i][j] = Math.pow((Math.PI/as), 1.5) * Math.exp(a);
+                    S[j][i] = S[i][j];
+                    T[i][j] = 0.5 * rat * (6-4 * rat * (ra[i]-ra[j]) * (ra[i]-ra[j])) * S[i][j];
+                    T[j][i] = T[i][j];
+                    double sqrt = Math.sqrt(as * (rp - r) * (rp - r));
                     if (rp == 0) {
-                        F0 = 1 + sqrt(pi) / 2 * erf(v) / v;
+                        F0 = 1+Math.sqrt(Math.PI)/2 * ErrorFunction.erf(sqrt) / sqrt;
                     } else if (rp == r) {
-                        double u = sqrt(as * rp * rp);
-                        F0 = sqrt(pi) / 2 * erf(u) / u;
+                        F0 = Math.sqrt(Math.PI)/2 * ErrorFunction.erf(as*rp*rp)/Math.sqrt(as*rp*rp)+1;
                     } else {
-                        double u = sqrt(as * rp * rp);
-                        F0 = sqrt(pi) / 2 * (erf(u) / u + erf(v) / v);
+                        F0 = Math.sqrt(Math.PI)/2 * (ErrorFunction.erf(Math.sqrt(as*rp*rp))/Math.sqrt(as*rp*rp)
+                                                        + ErrorFunction.erf(sqrt)/sqrt);
                     }
-
-                    A[i][j] = -2 * pi * Z / as * exp(a2) * F0;
-                    A[j][i] = A[i][j]; // symmetry
+                    A[i][j] = -2*Math.PI*Z/as*Math.exp(a)*F0;
+                    A[j][i] = A[i][j];
                 }
             }
 
-            RealMatrix[] eigS = Linear.eig(S);
-            V_re = eigS[0];
-            D_re = eigS[1];
+            S_D = new double[8][8];
+            for (int i = 0; i < 8; i++) {
+                System.arraycopy(S[i], 0, S_D[i], 0, 8);
+            }
+            RealMatrix S_matrix = MatrixUtils.createRealMatrix(S_D);
+            EigenDecomposition decomposition = new EigenDecomposition(S_matrix);
+            V = decomposition.getV();
+            D = decomposition.getD();
 
-            double[][] V_array = new double[8][8];
+            double[][] V_array_temp = new double[8][8];
             for (int i = 0; i < asize; i++) {
-                double[] V_col = V_re.getColumn(0);
-                Dii = Math.sqrt(D_re.getEntry(i, i));
-                for (int j = 0; j < V_col.length; j++) {
-                    V_col[j] /= Dii;
-                    V_array[i][j] = V_col[j];
+                double[] V_array = V.getColumn(0);
+                Dii = Math.pow(D.getEntry(i, i), 0.5);
+                System.out.println(Dii);
+                for (int j = 0; j < V_array.length; j++) {
+                    V_array[j] /= Dii;
+                    V_array_temp[i][j] = V_array[j];
                 }
             }
-            V_re = MatrixUtils.createRealMatrix(V_array);
+            V = MatrixUtils.createRealMatrix(V_array_temp);
 
-            // test
-//            for (int i = 0; i < 8; i++) {
-//                for (int j = 0; j < 8; j++) {
-//                    for (int k = 0; k < 8; k++) {
-//                        for (int l = 0; l < 8; l++) {
-//                            G[i][j][k][l] = 1000;
-//                        }
-//                    }
-//                }
-//            }
-
-            // iterate over each gaussian basis function
+            // iterate over each Gaussian basis function
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j <= i; j++) {
-                    as1 = a[i] + a[j];
-                    ap1 = a[i] * a[j];
-                    rp = (a[i] * ra[i] + a[j] * ra[j]) / as1;
+                    as1 = alpha[i] + alpha[j];
+                    ap1 = alpha[i] * alpha[j];
+                    rp = (alpha[i] * ra[i] + alpha[j] * ra[j])/as1;
                     for (int k = 0; k <= i - 1; k++) {
                         double v = -ap1 * (ra[i] - ra[j]) * (ra[i] - ra[j]) / as1;
                         for (int l = 0; l <= k; l++) {
-                            as2 = a[k] + a[l];
-                            ap2 = a[k] * a[l];
-                            rq = (a[k] * ra[k] + a[l] * ra[l]) / as2;
+                            as2 = alpha[k] + alpha[l];
+                            ap2 = alpha[k] * alpha[l];
+                            rq = (alpha[k] * ra[k] + alpha[l] * ra[l])/as2;
                             if ((rp - rq) == 0) {
                                 F0 = 1;
                             } else {
                                 double sqrt = Math.sqrt(as1 * as2 * (rp - rq) * (rp - rq) / (as1 + as2));
-                                F0 = Math.sqrt(Math.PI) / 2 * ErrorFunction.erf(sqrt) / sqrt;
+                                F0 = Math.sqrt(Math.PI)/2 * ErrorFunction.erf(sqrt) / sqrt;
                             }
-                            G[i][j][k][l] = 2 * Math.pow(Math.PI, 2.5) / as1 / as2 / Math.sqrt(as1 + as2)
-                                    * Math.exp(v - ap2 * (ra[k] - ra[l]) * (ra[k] - ra[l]) / as2) * F0;
+                            G[i][j][k][l] = 2 * Math.pow(Math.PI, 2.5) / as1 / as2 / Math.sqrt(as1+as2)
+                                                                * Math.exp(v - ap2 * (ra[k]-ra[l]) * (ra[k]-ra[l])) * F0;
                             G[k][l][i][j] = G[i][j][k][l]; // via symmetry
                             G[j][i][k][l] = G[i][j][k][l];
                             G[i][j][l][k] = G[i][j][k][l];
@@ -131,17 +119,17 @@ public class HHGroundStateHF {
                         }
                         k = i;
                         for (int l = 0; l <= j; l++) {
-                            as2 = a[k] + a[l];
-                            ap2 = a[k] * a[l];
-                            rq = (a[k] * ra[k] + a[l] * ra[l]) / as2;
+                            as2 = alpha[k] + alpha[l];
+                            ap2 = alpha[k] * alpha[l];
+                            rq = (alpha[k] * ra[k] + alpha[l] * ra[l])/as2;
                             if ((rp - rq) == 0) {
                                 F0 = 1;
                             } else {
-                                double sqrt = Math.sqrt(as1 * as2 * (rp - rq) * (rp - rq) / (as1 + as2));
-                                F0 = Math.sqrt(Math.PI) / 2 * ErrorFunction.erf(sqrt) / sqrt;
+                                double sqrt = Math.sqrt(as1 * as2 * (rp-rq) * (rp-rq) / (as1+as2));
+                                F0 = Math.sqrt(Math.PI)/2 * ErrorFunction.erf(sqrt) / sqrt;
                             }
-                            G[i][j][k][l] = 2 * Math.pow(Math.PI, 2.5) / as1 / as2 / Math.sqrt(as1 + as2)
-                                    * Math.exp(v - ap2 * (ra[k] - ra[l]) * (ra[k] - ra[l]) / as2) * F0;
+                            G[i][j][k][l] = 2 * Math.pow(Math.PI, 2.5) / as1 / as2 / Math.sqrt(as1+as2)
+                                                                * Math.exp(v - ap2 * (ra[k]-ra[l]) * (ra[k]-ra[l]) / as2) * F0;
                             G[k][l][i][j] = G[i][j][k][l]; // via symmetry
                             G[j][i][k][l] = G[i][j][k][l];
                             G[i][j][l][k] = G[i][j][k][l];
@@ -154,8 +142,6 @@ public class HHGroundStateHF {
                 }
             }
 
-            System.out.println();
-
             // self consistent loop
             C = new double[1][asize];
             Ci = new double[asize][1];
@@ -165,13 +151,13 @@ public class HHGroundStateHF {
             }
             RealMatrix C_M = MatrixUtils.createRealMatrix(C);
             RealMatrix C_Mi = MatrixUtils.createRealMatrix(Ci);
-            nor = C_M.multiply(MatrixUtils.createRealMatrix(S)).multiply(C_Mi).getEntry(0, 0);
+            nor = C_M.multiply(S_matrix).multiply(C_Mi).getColumn(0)[0];
             for (int i = 0; i < asize; i++) {
                 C[0][i] /= nor;
             }
 
             Elast = 1;
-            Eval = new double[8];
+            EVal = new double[8];
             P = new double[asize][asize];
             for (int i = 0; i < asize; i++) {
                 for (int j = 0; j < asize; j++) {
@@ -185,9 +171,9 @@ public class HHGroundStateHF {
             }
 
             // generating Fock matrix
-            while ((Math.abs(Eval[0] - Elast)) > 0.000001) {
+            while ((Math.abs(EVal[0] - Elast)) > 0.000001) {
                 count += 1;
-                Elast = Eval[0];
+                Elast = EVal[0];
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         J = 0;
@@ -203,15 +189,15 @@ public class HHGroundStateHF {
                 // solve generalized eigenvalue problem FC=ESC
                 // inverse of V is its conjugate transpose because V is unitary
                 RealMatrix F_M = MatrixUtils.createRealMatrix(F);
-                RealMatrix V_T = V_re.transpose();
-                RealMatrix F_P_ = V_T.multiply(V_re);
-                RealMatrix F_P = F_P_.multiply(V_re);
+                RealMatrix V_T = V.transpose();
+                RealMatrix F_P_ = V_T.multiply(V);
+                RealMatrix F_P = F_P_.multiply(V);
                 EigenDecomposition eigenDecomposition = new EigenDecomposition(F_P);
                 Vecp = eigenDecomposition.getV();
                 Val = eigenDecomposition.getD();
-                Vec = V_re.multiply(Vecp);
-                RealMatrix EigVal = MatrixUtils.createRealDiagonalMatrix(V_re.getColumn(0));
-                double[] vals = V_re.getColumn(0);
+                Vec = V.multiply(Vecp);
+                RealMatrix EigVal = MatrixUtils.createRealDiagonalMatrix(V.getColumn(0));
+                double[] vals = V.getColumn(0);
                 Double[] vals_ = new Double[vals.length];
                 for (int i = 0; i < vals.length; i++) {
                     vals_[i] = vals[i];
@@ -222,11 +208,10 @@ public class HHGroundStateHF {
                 Arrays.sort(indices, comparator);
                 Arrays.sort(vals);
 
-                Erec.add(Eval[0]);
+                Erec.add(EVal[0]);
             }
-        }
-
+            System.out.println(Erec);
         }
     }
 
-
+}
