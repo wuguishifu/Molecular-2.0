@@ -12,6 +12,7 @@ public class GraphRenderer {
     private final ArrayList<Point> points;
     private final Dimension displaySize;
     private final ArrayList<Axis> axes;
+    private final ArrayList<Title> titles;
     private float graphWidth = 0, graphHeight = 0;
     private int graphPaddingX = 0, graphPaddingY = 0;
     private float x1 = 0, y1 = 0, x2 = 0, y2 = 0;
@@ -20,29 +21,49 @@ public class GraphRenderer {
         this.points = new ArrayList<>();
         displaySize = gd.panel.getPreferredSize();
         axes = new ArrayList<>();
+        titles = new ArrayList<>();
     }
 
     public void paint(Graphics g) {
-        for (Point point : points) {
-            paintComponent(g, point.value);
-        }
-        for (int i = 0; i < points.size() - 1; i++) {
-            paintComponent(g, points.get(i).value, points.get(i + 1).value);
-        }
+        // draw background rectangle
+        g.setColor(Color.WHITE);
+        int rectWidth = displaySize.width - 2 * graphPaddingX;
+        int rectHeight = displaySize.height - 2 * graphPaddingY;
+        g.fillRect(graphPaddingX, graphPaddingY, rectWidth, rectHeight);
+
+        // draw axes
+        g.setColor(Color.BLACK);
         for (Axis axis : axes) {
             axis.paint(g);
+        }
+        g.drawLine(graphPaddingX, graphPaddingY, displaySize.width - graphPaddingX, graphPaddingY);
+        g.drawLine(displaySize.width - graphPaddingX, graphPaddingY,
+                displaySize.width - graphPaddingX, displaySize.height - graphPaddingY);
+
+        // draw title
+        for (Title title : titles) {
+            title.paint(g);
+        }
+
+        // draw series
+        g.setColor(Color.BLUE);
+        for (Point point : points) {
+            paintComponent(g, point.value);
         }
     }
 
     public void paintComponent(Graphics g, Vector2f v) {
+        Graphics2D g2d = (Graphics2D) g.create();
         float px = v.x - x1;
         float py = v.y - y1;
-        float diffX = px/graphWidth;
-        float diffY = py/graphHeight;
+        float diffX = px / graphWidth;
+        float diffY = py / graphHeight;
         int x = (int) (diffX * (displaySize.width - 2 * graphPaddingX));
-        int y = (int) (diffY * (displaySize.height - 2 * graphPaddingY));
+        int y = (int) -(diffY * (displaySize.height - 2 * graphPaddingY)) + displaySize.height - 2 * graphPaddingY;
         int r = 5;
-        g.drawOval(x + graphPaddingX - r, y + graphPaddingY - r, 2 * r, 2 * r);
+        g2d.setStroke(new BasicStroke(2));
+        g2d.drawOval(x + graphPaddingX - r, y + graphPaddingY - r, 2 * r, 2 * r);
+        g2d.dispose();
     }
 
     public void paintComponent(Graphics g, Vector2f v1, Vector2f v2) {
@@ -50,10 +71,10 @@ public class GraphRenderer {
         float py1 = v1.y - y1;
         float px2 = v2.x - x1;
         float py2 = v2.y - y1;
-        float diffX1 = px1/graphWidth;
-        float diffY1 = py1/graphHeight;
-        float diffX2 = px2/graphWidth;
-        float diffY2 = py2/graphHeight;
+        float diffX1 = px1 / graphWidth;
+        float diffY1 = py1 / graphHeight;
+        float diffX2 = px2 / graphWidth;
+        float diffY2 = py2 / graphHeight;
         int x1 = (int) (diffX1 * (displaySize.width - 2 * graphPaddingX));
         int y1 = (int) (diffY1 * (displaySize.height - 2 * graphPaddingY));
         int x2 = (int) (diffX2 * (displaySize.width - 2 * graphPaddingX));
@@ -80,12 +101,12 @@ public class GraphRenderer {
         this.points.remove(p);
     }
 
-    public void addAxis(float v0, float v1, int intervals, String label, int orientation) {
+    public void addAxis(float v0, float v1, int intervals, String label, int orientation, boolean SN) {
         Font h = new Font("Helvetica", Font.PLAIN, 15);
         Font h1 = new Font("Helvetica", Font.PLAIN, 12);
         axes.add(g -> {
-            int paddingX = displaySize.width/10;
-            int paddingY = displaySize.height/10;
+            int paddingX = displaySize.width / 10;
+            int paddingY = displaySize.height / 10;
             graphPaddingX = paddingX;
             graphPaddingY = paddingY;
             if (orientation == X) {
@@ -95,7 +116,7 @@ public class GraphRenderer {
                 g.drawLine(paddingX, displaySize.height - paddingY,
                         displaySize.width - paddingX, displaySize.height - paddingY);
                 drawCenteredString(g, label,
-                        new Rectangle(0, displaySize.height - paddingY/2,displaySize.width, paddingY/2), h, 0);
+                        new Rectangle(0, displaySize.height - paddingY / 2, displaySize.width, paddingY / 2), h, 0);
                 // draw intervals
                 for (int i = 0; i < intervals; i++) {
                     int dx = (displaySize.width - 2 * paddingX) / (intervals - 1);
@@ -106,9 +127,9 @@ public class GraphRenderer {
                     float intervalValue = (v1 - v0) / (intervals - 1);
                     float value = i * intervalValue + v0;
                     FontMetrics metrics = g.getFontMetrics(h1);
-                    int yPos = y1 + metrics.getHeight()/2 + metrics.getAscent();
+                    int yPos = y1 + metrics.getHeight() / 2 + metrics.getAscent();
                     g.setFont(h1);
-                    g.drawString(String.format("%6.3e", value), x - paddingX/6, yPos);
+                    g.drawString(SN ? String.format("%6.3e", value) : String.valueOf(value), x - paddingX / 6, yPos);
                 }
             } else if (orientation == Y) {
                 graphHeight = v1 - v0;
@@ -116,7 +137,7 @@ public class GraphRenderer {
                 y2 = v1;
                 g.drawLine(paddingX, paddingY, paddingX, displaySize.height - paddingY);
                 drawCenteredString(g, label,
-                        new Rectangle(0, 0, paddingX/2, displaySize.height), h, 90);
+                        new Rectangle(0, 0, paddingX / 2, displaySize.height), h, 90);
                 // draw intervals
                 for (int i = 0; i < intervals; i++) {
                     int dy = (displaySize.height - 2 * paddingY) / (intervals - 1);
@@ -126,7 +147,7 @@ public class GraphRenderer {
                     float intervalValue = (v0 - v1) / (intervals - 1);
                     float value = i * intervalValue + v1;
                     FontMetrics metrics = g.getFontMetrics(h1);
-                    String text = String.format("%6.2e", value);
+                    String text = SN ? String.format("%6.2e", value) : String.valueOf(value);
                     int xPos = x1 - metrics.getHeight() + metrics.getAscent();
                     AffineTransform affineTransform = new AffineTransform();
                     affineTransform.rotate(Math.toRadians(-90), 0, 0);
@@ -137,6 +158,13 @@ public class GraphRenderer {
             }
         });
     }
+
+    public void addTitle(String title) {
+        Font h = new Font("Helvetica", Font.BOLD, 20);
+        titles.add(g -> drawCenteredString(g, title,
+                new Rectangle(0, 0, displaySize.width, graphPaddingY), h, 0));
+    }
+
     public static int X = 0;
     public static int Y = 1;
 
@@ -151,7 +179,7 @@ public class GraphRenderer {
         } else {
             AffineTransform affineTransform = new AffineTransform();
             affineTransform.rotate(Math.toRadians(-angle),
-                metrics.stringWidth(text)/2., 0);
+                    metrics.stringWidth(text) / 2., 0);
             Font rotatedFont = font.deriveFont(affineTransform);
             g2d.setFont(rotatedFont);
             g2d.drawString(text, x, y);
@@ -169,6 +197,10 @@ public class GraphRenderer {
         public Point(Vector2f value) {
             this.value = value;
         }
+    }
+
+    private interface Title {
+        void paint(Graphics g);
     }
 
 }

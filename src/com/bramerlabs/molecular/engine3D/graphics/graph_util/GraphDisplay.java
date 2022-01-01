@@ -22,6 +22,10 @@ public class GraphDisplay {
             @Override
             public void paint(Graphics g) {
                 for (GraphRenderer renderer : renderers) {
+                    Graphics2D g2d = (Graphics2D) g;
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    super.paint(g);
+
                     renderer.paint(g);
                 }
             }
@@ -45,16 +49,11 @@ public class GraphDisplay {
         GraphDisplay gd = new GraphDisplay(new Dimension(800, 600));
         GraphRenderer gr = new GraphRenderer(gd);
         gd.addRenderer(gr);
-        gr.addAxis(0, 10, 5, "velocity [cm/s]", GraphRenderer.X);
-        gr.addAxis(-5, 5, 5, "pressure drop [Pa]", GraphRenderer.Y);
+        gr.addAxis(0, 10, 5, "velocity [cm/s]", GraphRenderer.X, true);
+        gr.addAxis(-5, 5, 5, "pressure drop [Pa]", GraphRenderer.Y, true);
         for (int i = 0; i < 100; i++) {
-            gr.addComponent(new Vector2f(i/10.f, 3 * equation(i/10f)));
+            gr.addComponent(new Vector2f(i/10f, i/10f));
         }
         gd.repaint();
     }
-
-    public static float equation(float x) {
-        return (float) (Math.sin(x) * Math.cos(2 * x));
-    }
-
 }

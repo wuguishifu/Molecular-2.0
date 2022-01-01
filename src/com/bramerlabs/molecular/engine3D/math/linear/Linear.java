@@ -17,17 +17,15 @@ public class Linear {
     }
 
     public static void main(String[] args) {
-        double[][][][] G = new double[8][8][8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                for (int k = 0; k < 8; k++) {
-                    for (int l = 0; l < 8; l++) {
-                        G[i][j][k][l] = i + 10 * j + 100 * k + 1000 * l;
-                    }
-                }
+        double[][] S = new double[4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                S[i][j] = 10 * i + j;
             }
         }
-        System.out.println();
+        RealMatrix M = MatrixUtils.createRealMatrix(S);
+        RealMatrix N = M.transpose();
+        System.out.println(M);
     }
 
 }

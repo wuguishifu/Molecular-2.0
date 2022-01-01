@@ -1,0 +1,52 @@
+// iterate over each gaussian basis function
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j <= i; j++) {
+                    as1 = a[i] + a[j];
+                    ap1 = a[i] * a[j];
+                    rp = (a[i] * ra[i] + a[j] * ra[j]) / as1;
+                    for (int k = 0; k <= i - 1; k++) {
+                        double v = -ap1 * (ra[i] - ra[j]) * (ra[i] - ra[j]) / as1;
+                        for (int l = 0; l <= k; l++) {
+                            as2 = a[k] + a[l];
+                            ap2 = a[k] * a[l];
+                            rq = (a[k] * ra[k] + a[l] * ra[l]) / as2;
+                            if ((rp - rq) < 0.00001f) {
+                                F0 = 1;
+                            } else {
+                                double sqrt = Math.sqrt(as1 * as2 * (rp - rq) * (rp - rq) / (as1 + as2));
+                                F0 = Math.sqrt(Math.PI) / 2 * ErrorFunction.erf(sqrt) / sqrt;
+                            }
+                            G[i][j][k][l] = 2 * Math.pow(Math.PI, 2.5) / as1 / as2 / Math.sqrt(as1 + as2)
+                                    * Math.exp(v - ap2 * (ra[k] - ra[l]) * (ra[k] - ra[l]) / as2) * F0;
+                            G[k][l][i][j] = G[i][j][k][l]; // via symmetry
+                            G[j][i][k][l] = G[i][j][k][l];
+                            G[i][j][l][k] = G[i][j][k][l];
+                            G[j][i][l][k] = G[i][j][k][l];
+                            G[k][l][j][i] = G[i][j][k][l];
+                            G[l][k][i][j] = G[i][j][k][l];
+                            G[l][k][j][i] = G[i][j][k][l];
+                        }
+                        k = i;
+                        for (int l = 0; l <= j; l++) {
+                            as2 = a[k] + a[l];
+                            ap2 = a[k] * a[l];
+                            rq = (a[k] * ra[k] + a[l] * ra[l]) / as2;
+                            if ((rp - rq) == 0) {
+                                F0 = 1;
+                            } else {
+                                double sqrt = Math.sqrt(as1 * as2 * (rp - rq) * (rp - rq) / (as1 + as2));
+                                F0 = Math.sqrt(Math.PI) / 2 * ErrorFunction.erf(sqrt) / sqrt;
+                            }
+                            G[i][j][k][l] = 2 * Math.pow(Math.PI, 2.5) / as1 / as2 / Math.sqrt(as1 + as2)
+                                    * Math.exp(v - ap2 * (ra[k] - ra[l]) * (ra[k] - ra[l]) / as2) * F0;
+                            G[k][l][i][j] = G[i][j][k][l]; // via symmetry
+                            G[j][i][k][l] = G[i][j][k][l];
+                            G[i][j][l][k] = G[i][j][k][l];
+                            G[j][i][l][k] = G[i][j][k][l];
+                            G[k][l][j][i] = G[i][j][k][l];
+                            G[l][k][i][j] = G[i][j][k][l];
+                            G[l][k][j][i] = G[i][j][k][l];
+                        }
+                    }
+                }
+            }
