@@ -20,15 +20,15 @@ public class HHGroundStateHF {
 
     public static void main(String[] args) {
 
-        int asize, count;
-        double Z = 1, Elast, Vi, as, ap, rat, rp, F0, as1, ap1, as2, ap2, rq, r, NNr, nor, J, Qs;
-        double[] a, a1, ra, rplot, Eval, groundWaveFunction, Eg;
+        int asize;
+        double Z = 1, Elast, as, ap, rat, rp, F0, as1, ap1, as2, ap2, rq, r, NNr, nor, J, Qs, rmin;
+        double[] a, a1, ra, rplot, groundWaveFunction, waveFunctionMin = new double[500], Eg, Eg_sorted;
         double[][] T = new double[8][8], S = new double[8][8], A = new double[8][8], Ci, S_D, F = new double[8][8];
         double[][][][] G = new double[8][8][8][8];
         RealMatrix V_re, D_re, Vecp, Vec, Val, C, P, Fp;
-        RealMatrix V_im, D_im;
 
         ArrayList<Double> Erec = new ArrayList<>();
+        ArrayList<Double> Erecmin = new ArrayList<>();
 
         double pi = Math.PI, e = Math.E;
 
@@ -38,13 +38,15 @@ public class HHGroundStateHF {
         }
 
         Eg = new double[42];
+        Eg_sorted = new double[42];
 
         for (int y = 1; y <= 41; y++) {
             r = 0.45 + 0.05 * y; // distance between nuclei in A.U. (bohr radius)
             NNr = 1 / r;
 
             // alphas for the gaussian basis functions for each H atom
-            a1 = new double[]{13.00773, 1.962079, 0.444529, 0.1219492};
+            a1 = new double[]{13.00773, 1.962079, 0.444529, 0.1219492}; // hydrogen
+//            a1 = new double[]{0.297194, 1.236745, 5.749982, 38.216677}; // helium
             a = new double[8];
             for (int i = 0; i < 4; i++) {
                 a[i] = a[i + 4] = a1[i];
@@ -152,13 +154,11 @@ public class HHGroundStateHF {
             C = C.scalarMultiply(1 / nor); // initial guess
             Elast = 1;
             P = C.transpose().multiply(C);
-            count = 0;
 
             // generating Fock matrix
             double Ecur = 100;
             Erec.clear();
             while ((abs(Ecur - Elast)) > 0.000001f) {
-                count++;
                 Elast = Ecur;
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
@@ -172,9 +172,7 @@ public class HHGroundStateHF {
                     }
                 }
 
-                RealMatrix V_transpose = (V_re.copy()).transpose();
-                RealMatrix F_Matrix = MatrixUtils.createRealMatrix(F);
-                Fp = V_transpose.multiply(F_Matrix).multiply(V_re);
+                Fp = V_re.transpose().multiply(MatrixUtils.createRealMatrix(F)).multiply(V_re);
                 RealMatrix[] eigF = Linear.eig(Fp);
                 Vecp = eigF[0];
                 Val = eigF[1];
@@ -201,21 +199,27 @@ public class HHGroundStateHF {
                 C.setRow(0, GrCoeff);
 
                 // new input density matrix
-                P = P.scalarMultiply(0.8).add(C.transpose().scalarMultiply(0.2).multiply(C));
+                P = P.scalarMultiply(0.6).add(C.transpose().scalarMultiply(0.2).multiply(C));
             }
 
             // only want to populate the ground level wave function once for the optimized C
             groundWaveFunction = new double[rplot.length];
             for (int x = 0; x < 500; x++) {
                 double sum = 0;
-                double[] exp1 = new double[4];
-                double[] exp2 = new double[4];
                 for (int i = 0; i < 4; i++) {
                     sum += C.getEntry(0, i) * exp(-a[i] * rplot[x] * rplot[x]);
                     sum += C.getEntry(0, i + 4) * exp(-a[i + 4] * (rplot[x] - r) * (rplot[x] - r));
                 }
                 groundWaveFunction[x] = sum;
             }
+//            for (int i = 0; i < 8; i++) {
+//                if (C.getEntry(0, i) < 0) {
+//                    System.out.print(String.format("%1.4f", C.getEntry(0, i)) + "\t");
+//                } else {
+//                    System.out.print(" " + String.format("%1.4f", C.getEntry(0, i)) + "\t");
+//                }
+//            }
+//            System.out.println();
 
             Qs = 0;
             for (int i = 0; i < 8; i++) {
@@ -230,13 +234,20 @@ public class HHGroundStateHF {
             }
             Eg[y] = 2 * C.multiply(MatrixUtils.createRealMatrix(T).add(MatrixUtils.createRealMatrix(A)))
                     .multiply(C.transpose()).getEntry(0, 0) + Qs + NNr;
-            System.out.println(Eg[y]);
+            System.arraycopy(Eg, 0, Eg_sorted, 0, Eg.length);
+            Arrays.sort(Eg_sorted);
+            if (Eg[y] == Eg_sorted[0]) {
+                rmin = r;
+                Erecmin.clear();
+                Erecmin.addAll(Erec);
+                System.arraycopy(groundWaveFunction, 0, waveFunctionMin, 0, groundWaveFunction.length);
+            }
 
         }
 
         double[] Y = new double[Erec.size()];
         for (int i = 0; i < Erec.size(); i++) {
-            Y[i] = Erec.get(i);
+            Y[i] = Erecmin.get(i);
         }
         Arrays.sort(Y);
 
@@ -244,12 +255,12 @@ public class HHGroundStateHF {
         GraphDisplay gd_fl = new GraphDisplay(new Dimension(800, 600));
         GraphRenderer gr_fl = new GraphRenderer(gd_fl);
         gd_fl.addRenderer(gr_fl);
-        gr_fl.addAxis(0, Erec.size(), 5, "Step of Convergence", GraphRenderer.X, false);
+        gr_fl.addAxis(0, Erecmin.size(), 5, "Step of Convergence", GraphRenderer.X, false);
         double yDiff = Y[Y.length - 1] - Y[0];
         double yDiffTenth = yDiff * 0.1d;
         gr_fl.addAxis((float) (Y[0] - yDiffTenth), (float) (Y[Y.length - 1] + yDiffTenth), 5, "Fock Energy Level (a.u.)", GraphRenderer.Y, true);
-        for (int i = 0; i < Erec.size(); i++) {
-            gr_fl.addComponent(new Vector2f(i, Erec.get(i).floatValue()));
+        for (int i = 0; i < Erecmin.size(); i++) {
+            gr_fl.addComponent(new Vector2f(i, Erecmin.get(i).floatValue()));
         }
         gr_fl.addTitle("Fock Energy Level Convergence vs. Step");
         gd_fl.repaint();
@@ -272,6 +283,22 @@ public class HHGroundStateHF {
         gr_te.addTitle("Total Energy vs. H-H Bond Length");
         gd_te.repaint();
 
+        // Electron probability density
+        GraphDisplay gd_ed = new GraphDisplay(new Dimension(800, 600));
+        GraphRenderer gr_ed = new GraphRenderer(gd_ed);
+        gd_ed.addRenderer(gr_ed);
+        gr_ed.addAxis(-2, 3, 11, "r position", GraphRenderer.X, false);
+        temp = new double[rplot.length];
+        System.arraycopy(waveFunctionMin, 0, temp, 0, waveFunctionMin.length);
+        Arrays.sort(temp);
+        yDiff = temp[temp.length - 1] - temp[0];
+        yDiffTenth = yDiff * 0.1d;
+        gr_ed.addAxis((float) (temp[0] - yDiffTenth), (float) (temp[temp.length - 1] + yDiffTenth), 5, "Probability Density", GraphRenderer.Y, true);
+        for (int i = 0 ; i < rplot.length; i++) {
+            gr_ed.addComponent(new Vector2f((float) rplot[i], (float) waveFunctionMin[i]));
+        }
+        gr_ed.addTitle("Probability Density Around H-H Bond");
+        gd_ed.repaint();
     }
 
 
