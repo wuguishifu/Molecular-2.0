@@ -21,8 +21,8 @@ public class HHGroundStateHF {
     public static void main(String[] args) {
 
         int asize, count;
-        double Z = 1, Elast, Vi, as, ap, rat, rp, F0, as1, ap1, as2, ap2, rq, r, NNr, nor, J;
-        double[] a, a1, ra, rplot, Eval;
+        double Z = 1, Elast, Vi, as, ap, rat, rp, F0, as1, ap1, as2, ap2, rq, r, NNr, nor, J, Qs;
+        double[] a, a1, ra, rplot, Eval, groundWaveFunction, Eg;
         double[][] T = new double[8][8], S = new double[8][8], A = new double[8][8], Ci, S_D, F = new double[8][8];
         double[][][][] G = new double[8][8][8][8];
         RealMatrix V_re, D_re, Vecp, Vec, Val, C, P, Fp;
@@ -31,6 +31,13 @@ public class HHGroundStateHF {
         ArrayList<Double> Erec = new ArrayList<>();
 
         double pi = Math.PI, e = Math.E;
+
+        rplot = new double[(int) ((3 - (-2)) / 0.01)]; // range in A.U. for plotting probability density
+        for (int i = 0; i < rplot.length; i++) {
+            rplot[i] = 0.01 * i - 2;
+        }
+
+        Eg = new double[42];
 
         for (int y = 1; y <= 41; y++) {
             r = 0.45 + 0.05 * y; // distance between nuclei in A.U. (bohr radius)
@@ -144,7 +151,6 @@ public class HHGroundStateHF {
             nor = C.multiply(MatrixUtils.createRealMatrix(S)).multiply(C.transpose()).getEntry(0, 0);
             C = C.scalarMultiply(1 / nor); // initial guess
             Elast = 1;
-            Eval = new double[8];
             P = C.transpose().multiply(C);
             count = 0;
 
@@ -189,16 +195,43 @@ public class HHGroundStateHF {
                 Erec.add(EigVal[0]);
 
                 double[] GrCoeff = Vec.getColumn(indices[0]);
+
+                // new C matrix, normalized w.r.t. S
                 C = MatrixUtils.createRealMatrix(new double[1][8]);
                 C.setRow(0, GrCoeff);
 
+                // new input density matrix
                 P = P.scalarMultiply(0.8).add(C.transpose().scalarMultiply(0.2).multiply(C));
             }
-        }
 
-        rplot = new double[(int) ((3 - (-2)) / 0.01)]; // range in A.U. for plotting probability density
-        for (int i = 0; i < rplot.length; i++) {
-            rplot[i] = 0.01 * i - 2;
+            // only want to populate the ground level wave function once for the optimized C
+            groundWaveFunction = new double[rplot.length];
+            for (int x = 0; x < 500; x++) {
+                double sum = 0;
+                double[] exp1 = new double[4];
+                double[] exp2 = new double[4];
+                for (int i = 0; i < 4; i++) {
+                    sum += C.getEntry(0, i) * exp(-a[i] * rplot[x] * rplot[x]);
+                    sum += C.getEntry(0, i + 4) * exp(-a[i + 4] * (rplot[x] - r) * (rplot[x] - r));
+                }
+                groundWaveFunction[x] = sum;
+            }
+
+            Qs = 0;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 8; l++) {
+                            Qs += G[i][j][k][l] * C.getEntry(0, i) * C.getEntry(0, j)
+                                    * C.getEntry(0, k) * C.getEntry(0, l);
+                        }
+                    }
+                }
+            }
+            Eg[y] = 2 * C.multiply(MatrixUtils.createRealMatrix(T).add(MatrixUtils.createRealMatrix(A)))
+                    .multiply(C.transpose()).getEntry(0, 0) + Qs + NNr;
+            System.out.println(Eg[y]);
+
         }
 
         double[] Y = new double[Erec.size()];
@@ -207,18 +240,38 @@ public class HHGroundStateHF {
         }
         Arrays.sort(Y);
 
-        GraphDisplay gd = new GraphDisplay(new Dimension(800, 600));
-        GraphRenderer gr = new GraphRenderer(gd);
-        gd.addRenderer(gr);
-        gr.addAxis(0, Erec.size(), 5, "Step of Convergence", GraphRenderer.X, false);
+        // Fock energy level convergence
+        GraphDisplay gd_fl = new GraphDisplay(new Dimension(800, 600));
+        GraphRenderer gr_fl = new GraphRenderer(gd_fl);
+        gd_fl.addRenderer(gr_fl);
+        gr_fl.addAxis(0, Erec.size(), 5, "Step of Convergence", GraphRenderer.X, false);
         double yDiff = Y[Y.length - 1] - Y[0];
         double yDiffTenth = yDiff * 0.1d;
-        gr.addAxis((float) (Y[0] - yDiffTenth), (float) (Y[Y.length - 1] + yDiffTenth), 5, "Fock Energy Level (a.u.)", GraphRenderer.Y, true);
+        gr_fl.addAxis((float) (Y[0] - yDiffTenth), (float) (Y[Y.length - 1] + yDiffTenth), 5, "Fock Energy Level (a.u.)", GraphRenderer.Y, true);
         for (int i = 0; i < Erec.size(); i++) {
-            gr.addComponent(new Vector2f(i, Erec.get(i).floatValue()));
+            gr_fl.addComponent(new Vector2f(i, Erec.get(i).floatValue()));
         }
-        gr.addTitle("Fock Energy Level Convergence vs. Step");
-        gd.repaint();
+        gr_fl.addTitle("Fock Energy Level Convergence vs. Step");
+        gd_fl.repaint();
+
+        // Total energy
+        GraphDisplay gd_te = new GraphDisplay(new Dimension(800, 600));
+        GraphRenderer gr_te = new GraphRenderer(gd_te);
+        gd_te.addRenderer(gr_te);
+        gr_te.addAxis(0.45f, 2.5f, 5, "H-H Bond Length", GraphRenderer.X, false);
+        double[] temp = new double[Eg.length];
+        System.arraycopy(Eg, 0, temp, 0, temp.length);
+        Arrays.sort(temp);
+        yDiff = temp[temp.length - 1] - temp[0];
+        yDiffTenth = yDiff * 0.1d;
+        gr_te.addAxis((float) (temp[0] - yDiffTenth), (float) (temp[temp.length - 1] + yDiffTenth), 5, "Total Energy (in a.u.)", GraphRenderer.Y, true);
+        for (int i = 0; i < Eg.length; i++) {
+            double x = 0.45 + 0.05 * i; // distance between nuclei in A.U. (bohr radius)
+            gr_te.addComponent(new Vector2f((float) x, (float) Eg[i]));
+        }
+        gr_te.addTitle("Total Energy vs. H-H Bond Length");
+        gd_te.repaint();
+
     }
 
 
