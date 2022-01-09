@@ -1,9 +1,8 @@
-package com.bramerlabs.molecular.main;
+package com.bramerlabs.molecular.utils.hartree_fock;
 
 import com.bramerlabs.molecular.engine3D.graphics.graph_util.GraphDisplay;
 import com.bramerlabs.molecular.engine3D.graphics.graph_util.GraphRenderer;
 import com.bramerlabs.molecular.engine3D.math.comparators.ArrayIndexComparator;
-import com.bramerlabs.molecular.engine3D.math.functions.ErrorFunction;
 import com.bramerlabs.molecular.engine3D.math.linear.Linear;
 import com.bramerlabs.molecular.engine3D.math.vector.Vector2f;
 import org.apache.commons.math3.linear.MatrixUtils;
@@ -21,7 +20,7 @@ public class HHGroundStateHF {
     public static void main(String[] args) {
 
         int asize;
-        double Z = 1, Elast, as, ap, rat, rp, F0, as1, ap1, as2, ap2, rq, r, NNr, nor, J, Qs, rmin;
+        double Z = 1, Elast, as, ap, rat, rp, F0, as1, ap1, as2, ap2, rq, r, NNr, nor, J, Qs, rmin = 0;
         double[] a, a1, ra, rplot, groundWaveFunction, waveFunctionMin = new double[500], Eg, Eg_sorted;
         double[][] T = new double[8][8], S = new double[8][8], A = new double[8][8], Ci, S_D, F = new double[8][8];
         double[][][][] G = new double[8][8][8][8];
@@ -212,14 +211,6 @@ public class HHGroundStateHF {
                 }
                 groundWaveFunction[x] = sum;
             }
-//            for (int i = 0; i < 8; i++) {
-//                if (C.getEntry(0, i) < 0) {
-//                    System.out.print(String.format("%1.4f", C.getEntry(0, i)) + "\t");
-//                } else {
-//                    System.out.print(" " + String.format("%1.4f", C.getEntry(0, i)) + "\t");
-//                }
-//            }
-//            System.out.println();
 
             Qs = 0;
             for (int i = 0; i < 8; i++) {
@@ -299,6 +290,8 @@ public class HHGroundStateHF {
         }
         gr_ed.addTitle("Probability Density Around H-H Bond");
         gd_ed.repaint();
+
+        System.out.print("Minimum H-H Bond Radius: " + rmin);
     }
 
 

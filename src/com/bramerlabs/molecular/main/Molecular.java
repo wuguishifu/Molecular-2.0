@@ -20,7 +20,6 @@ import com.bramerlabs.molecular.molecule.MoleculeRenderer;
 import com.bramerlabs.molecular.molecule.components.atom.Atom;
 import com.bramerlabs.molecular.molecule.components.bond.Bond;
 import com.bramerlabs.molecular.molecule.groups.FunctionalGroupManager;
-import com.bramerlabs.molecular.molecule.util.MoleculeParser;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -201,10 +200,6 @@ public class Molecular implements Runnable {
             Vector3f normal = Vector3f.subtract(hydrogen.position, carbon.position);
             FunctionalGroupManager.createAndReplace(molecule, BENT, hydrogen, normal, 0);
             camera.setFocus(molecule.getCenter());
-
-            int length = MoleculeParser.longestChain(molecule);
-            System.out.println(length);
-
         }
     }
 
